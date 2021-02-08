@@ -1,0 +1,7 @@
+<!-- Home page template -->
+<h1>Home page</h1>
+{% if user.is_authenticated %}
+    <p>You are logged in as: {{user}}</p>
+{% else %}
+    <p>You are not logged in!</p>
+{% endif %}

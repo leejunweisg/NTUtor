@@ -16,5 +16,3 @@ You should see a ```(venv)``` in your terminal.
 1. Change directory to the repository: ```cd NTUtor```
 2. Run command: ```python manage.py runserver```
 3. Browse to ```localhost:8000``` on your browser.
-
-
