@@ -2,15 +2,15 @@
  CZ3002 - Group Assignment
 
 ## Installation
-1. Clone/branch repo into a location of your choice. (e.g. ```C:\Users\junwei\Desktop\projectfiles\```)
+1. Clone/branch repo into a location of your choice. (e.g. ```C:\Users\junwei\Desktop\projectfiles\```)&nbsp;
 The cloned repo will stored at ```C:\Users\junwei\Desktop\projectfiles\NTUtor\```
-2. Create a new virtual environemnt using venv: ```virtualenv venv```
+2. Create a new virtual environemnt using venv: ```virtualenv venv```&nbsp;
 The virtual environment will be created at: ```C:\Users\junwei\Desktop\projectfiles\venv\```
-5. Activate the virtual environment: ```./venv/Scripts/activate```
+3. Activate the virtual environment: ```./venv/Scripts/activate```&nbsp;
 You should see a ```(venv)``` in your terminal.
-7. Change directory to the cloned repository: ```cd NTUtor```
-8. Install dependencies using ```pip```: ```pip install -r requirements.txt```
-9. Installation complete.
+4. Change directory to the cloned repository: ```cd NTUtor```
+5. Install dependencies using ```pip```: ```pip install -r requirements.txt```
+6. Installation complete.
 
 ## Run Development Server
 1. Change directory to the repository: ```cd NTUtor```
