@@ -31,7 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # start of our apps
     'mainapp.apps.MainappConfig',
+    'chats.apps.ChatsConfig',
+    'moderation.apps.ModerationConfig',
+    'listings.apps.ListingsConfig',
+    'reviews.apps.ReviewsConfig',
+    'users.apps.UsersConfig',
+    # end of our apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
