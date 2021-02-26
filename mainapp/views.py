@@ -13,4 +13,3 @@ def home(request):
     # render page
     # defines the template to render and the context to pass into the template
     return render(request, 'index.html', context)
-

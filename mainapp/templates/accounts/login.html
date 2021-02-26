@@ -7,7 +7,7 @@
 
 {% block content %}
 
-    <!-- Page content -->
+<!-- Page content -->
     <div class="container mt--8 pb-5">
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-7">
@@ -15,6 +15,14 @@
             <div class="card-body px-lg-5 py-lg-5">
               <div class="text-center text-muted mb-2">
                 <h1 class="mb-3">Sign In</h1>
+                  <!-- Print django flash messages -->
+                  {% if messages %}
+                  {% for message in messages%}
+                  <div class="alert alert-{{ message.tags }} grid-margin">{{ message }}<button type="button" class="close"
+                      data-dismiss="alert">&times;</button></div>
+                  {% endfor %}
+                  {% endif %}
+                  
                   <!-- Display login errros -->
                   {% if form.errors %}
                   {% for field in form %}

@@ -13,7 +13,7 @@ class LoginFormView(SuccessMessageMixin, LoginView):
     success_message = f"Welcome, you are successfully logged in!"
 
     def get(self, request, *args, **kwargs):
-        # if user is already signed in, redirect back to dashboard
+        # if user is already signed in, redirect back to home
         if request.user.is_authenticated:
             messages.success(request, f"You are already signed in!")
             return redirect('home')
@@ -24,20 +24,21 @@ class LogoutFormView(SuccessMessageMixin, LogoutView):
     success_message = f"You have been successfully logged out!"
 
 def register(request):
-    # if user is already signed in, redirect back to dashboard
+    # if user is already signed in, redirect back to home
     if request.user.is_authenticated:
         messages.success(request, f"You are already signed in!")
-        return redirect('dashboard')
+        return redirect('home')
 
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
 
-        if form.is_valid() and not User.objects.filter(email=form.cleaned_data.get('email')).exists():
+        # email validation done on forms.py
+        if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f"Your account has been created! Please sign in!", )
             return redirect("login")
-        else:
+        else:                
             return render(request, 'accounts/register.html', {'form': form})
     else:
         form = UserRegisterForm()
