@@ -2,6 +2,8 @@ from django.db import models
 from listings.models import Listing
 from users.models import Profile
 
+# TODO: Chat Model
+
 #Chat may not need model? Will look into it
 #Actual chat text may be stored elsewhere?
 
