@@ -11,3 +11,6 @@ class Reviews(models.Model):
     description = models.TextField(max_length=3000)
     #Need to create validation either on form side or model side
     rating = models.FloatField()
+
+    def __str__(self):
+        return f"{self.reviewID}"

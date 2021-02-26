@@ -7,6 +7,9 @@ class School(models.Model):
     schoolCode = models.CharField(max_length=10, primary_key=True)
     schoolName = models.CharField(max_length=100)
 
+    def __str__(self):
+        return f"{self.schoolCode}"
+
 class Module(models.Model):
     #Django cannot have composite primary keys, thus, using auto increment for pri key
     moduleID = models.AutoField(primary_key = True)
@@ -14,6 +17,9 @@ class Module(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     moduleCode = models.CharField(max_length=20)
     moduleName = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f"{self.moduleID}"
 
 class Listing(models.Model):
     listingID = models.AutoField(primary_key=True)
@@ -28,6 +34,10 @@ class Listing(models.Model):
     #Once tutor wants to stop teaching, can close tuition listing
     closeListing = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f"{self.listingID}: {self.title}"
+
+
 class TuitionSession(models.Model):
     tuitionSessionID = models.AutoField(primary_key = True)
     tutor = models.ForeignKey(Profile, on_delete=models.SET_NULL, related_name="tutor")
@@ -39,6 +49,9 @@ class TuitionSession(models.Model):
     endDateTime = models.DateTimeField()
     #Once complete
     complete = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.tuitionSessionID}"
 
 
 

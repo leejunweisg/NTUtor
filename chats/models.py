@@ -11,4 +11,7 @@ class Chat(models.Model):
     tutor = models.ForeignKey(Profile, on_delete=models.SET_NULL, related_name="tutor")
     learner = models.ForeignKey(Profile, on_delete=models.SET_NULL, related_name="learner"
 
+    def __str__(self):
+        return f"{self.chatID}"
+
 
