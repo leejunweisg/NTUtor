@@ -7,8 +7,10 @@ from PIL import Image
 # one user mapped to one profile
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=300)
     email = models.EmailField()
     verified = models.BooleanField()
+    description = models.TextField()
     image = models.ImageField(default='default.png', upload_to='profile_pics')
 
     def __str__(self):
