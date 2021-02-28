@@ -2,7 +2,7 @@ from django.db import models
 from users.models import Profile
 from listings.models import TuitionSession
 
-class Reviews(models.Model):
+class Review(models.Model):
     reviewID = models.AutoField(primary_key=True)
 
     # Set the tuition session to null, but leave review there
