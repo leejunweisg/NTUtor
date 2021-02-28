@@ -1,26 +1,16 @@
 from django.db import models
 from users.models import Profile
 
-# School & Module will get data from api(?)
-
-class School(models.Model):
-    schoolCode = models.CharField(max_length=10, primary_key=True)
-    schoolName = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f"{self.schoolCode}"
-
 class Module(models.Model):
     #Django cannot have composite primary keys, thus, using auto increment for pri key
     moduleID = models.AutoField(primary_key = True)
 
     #If school is deleted, then module is also deleted
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
-    moduleCode = models.CharField(max_length=20)
+    moduleCode = models.CharField(max_length=20, unique=True)
     moduleName = models.CharField(max_length=200)
 
     def __str__(self):
-        return f"{self.moduleID}"
+        return f"{self.moduleCode}: {self.moduleName}"
 
 class Listing(models.Model):
     listingID = models.AutoField(primary_key=True)
