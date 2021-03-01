@@ -6,7 +6,7 @@
 The cloned repo will stored at ```C:\Users\junwei\Desktop\projectfiles\NTUtor\```
 2. Create a new virtual environemnt using venv: ```virtualenv venv```<br/>
 The virtual environment will be created at: ```C:\Users\junwei\Desktop\projectfiles\venv\```
-3. Activate the virtual environment: ```./venv/Scripts/activate```<br/>
+3. Activate the virtual environment: ```.\venv\Scripts\activate```<br/>
 You should see a ```(venv)``` in your terminal.
 4. Change directory to the cloned repository: ```cd NTUtor```
 5. Install dependencies using ```pip```: ```pip install -r requirements.txt```
