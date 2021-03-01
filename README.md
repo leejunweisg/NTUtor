@@ -15,8 +15,9 @@ You should see a ```(venv)``` in your terminal.
 
 ## Run Development Server
 1. Change directory to the repository: ```cd NTUtor```
-2. Run command: ```python manage.py runserver```
-3. Browse to ```localhost:8000``` on your browser.
+2. cd to your repo 
+3. Run command: ```python manage.py runserver```
+4. Browse to ```localhost:8000``` on your browser.
 
 ## Create admin account thru cmd
 1. To create an admin account in django:
