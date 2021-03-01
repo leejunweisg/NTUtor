@@ -17,3 +17,15 @@ You should see a ```(venv)``` in your terminal.
 1. Change directory to the repository: ```cd NTUtor```
 2. Run command: ```python manage.py runserver```
 3. Browse to ```localhost:8000``` on your browser.
+
+## Create admin account thru cmd
+1. To create an admin account in django:
+2. python manage.py createsuperuser
+3. Enter your desired username and press enter.
+4. Username: admin
+   You will then be prompted for your desired email address:
+5. Email address: admin@example.com
+   The final step is to enter your password. You will be asked to enter your password twice, the second time as a confirmation of the first.
+6. Password: **********
+   Password (again): *********
+   Superuser created successfully.
