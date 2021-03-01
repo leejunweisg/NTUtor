@@ -8,7 +8,7 @@ from PIL import Image
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=300, null=True)
-    verified = models.BooleanField(default=False)
+    verified = models.IntegerField(default=0)
     description = models.TextField(null=True)
     image = models.ImageField(default='default.png', upload_to='profile_pics')
 
