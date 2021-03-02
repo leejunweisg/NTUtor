@@ -25,9 +25,6 @@ class Listing(models.Model):
 
     # Get user from profile, if profile is deleted, the listings will also be deleted
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    
-    # Either Tutor or Tutee
-    typeOfStudent = models.CharField(max_length=10)
 
     # Once tutor wants to stop teaching, can close tuition listing
     closed = models.BooleanField(default=False)
