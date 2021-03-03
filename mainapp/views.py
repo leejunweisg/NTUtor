@@ -27,18 +27,31 @@ def moderation(request):
     context['verified_requests'] = moderation_views.get_verified_requests()
     return render(request, 'moderation/moderation.html', context)
 
-
+# approve a verified request
+@user_passes_test(lambda user: user.groups.filter(name = "Moderators").exists(), login_url='error-403')
 def moderation_approve(request, username=None):
     context = {}
-    context['result'] = moderation_views.approve(username)
-    messages.success(request, str(context['result']))
+    result = moderation_views.approve(username)
+    if result == True:
+        messages.success(request, "Successful, the user has been approved!")
+    else:
+        messages.warning(request, result)
+    return redirect('moderation-home')
+
+# reject a verified request
+@user_passes_test(lambda user: user.groups.filter(name = "Moderators").exists(), login_url='error-403')
+def moderation_reject(request, username=None):
+    context = {}
+    result = moderation_views.reject(username)
+    if result == True:
+        messages.success(request, "Successful, the user has been rejected!")
+    else:
+        messages.warning(request, result)
     return redirect('moderation-home')
 
 # error 403 page, displayed when unauthorized user tries to access moderation pages
 def error403(request):
-    return render(request, 'tables.html')
-
-    # return render(request, 'page-403.html')
+    return render(request, 'page-403.html')
 
 # refresh modules when view is called
 @user_passes_test(lambda user: user.is_superuser)

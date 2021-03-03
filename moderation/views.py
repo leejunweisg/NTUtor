@@ -30,18 +30,37 @@ def get_verified_requests():
     return results
 
 def approve(username):
-    # returns true if modified
-    # return false if not modified
+    try:
+        # find the user
+        profile = Profile.objects.get(user__username=username)
 
-    # find the user
-    profile = Profile.objects.get(user__username=username)
-    if profile:
-        print("user found:" + profile.user.username)
-        profile['verified'] = 1
-        profile.save()
-        print("saved!")
-        return True
-    #TODO: profile mmatching query does not exist
-    else:
-        print("user not found...")
-        return False
+        # check if user was already approved
+        if profile.verified == 1:
+            return "The user was already approved!"
+        # modify verified value
+        else:
+            profile.verified = 1
+            profile.save()
+            return True
+
+    # if user not found (only can happen if someone modified request URL)
+    except Profile.DoesNotExist:
+        return "The user was not found!"
+
+def reject(username):
+    try:
+        # find the user
+        profile = Profile.objects.get(user__username=username)
+
+        # check if user was already rejected
+        if profile.verified == 0:
+            return "The user was already rejected!"
+        # modify verified value
+        else:
+            profile.verified = 0
+            profile.save()
+            return True
+
+    # if user not found (only can happen if someone modified request URL)
+    except Profile.DoesNotExist:
+        return "The user was not found!"

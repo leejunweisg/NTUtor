@@ -46,7 +46,7 @@
                         <table class="table align-items-center table-flush">
                           <thead class="thead-light">
                             <tr>
-                              <th scope="col">Date of Request</th>
+                              <!--<th scope="col">Date of Request</th>-->
                               <th scope="col">Username</th>
                               <th scope="col"># of Tuition Sessions</th>
                               <th scope="col"># of Reviews</th>
@@ -61,13 +61,13 @@
                             {% else %}
                             {% for person in verified_requests %}
                             <tr>
-                              <th scope="row">
+                              <!--<th scope="row">
                                 <div class="media align-items-center">
                                   <div class="media-body">
                                     <span class="mb-0 text-sm">1/1/2021</span>
                                   </div>
                                 </div>
-                              </th>
+                              </th>-->
                               <!-- Username -->
                               <td>{{ person.username }}</td>
                               <!-- No. of tuition sessions completed -->
@@ -83,7 +83,7 @@
                                     <a class="btn btn-primary" href="profile/{{person.username}}">View Profile</a>
                                     <!-- TODO: Create url routes and view that takes in username variable -->
                                     <a class="btn btn-success" href="{% url 'approve' person.username %}">Approve</a>
-                                    <a class="btn btn-danger" href="#">Reject</a>
+                                    <a class="btn btn-danger" href="{% url 'reject' person.username %}">Reject</a>
                                 </div>
                               </td>
                             </tr>
