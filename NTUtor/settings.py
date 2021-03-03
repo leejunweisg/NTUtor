@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'listings.apps.ListingsConfig',
     'reviews.apps.ReviewsConfig',
     'users.apps.UsersConfig',
+    'crispy_forms',
     # end of our apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -138,3 +139,5 @@ LOGIN_URL = 'login'
 # override default redirect after login/logout
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
