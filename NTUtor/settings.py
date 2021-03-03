@@ -34,7 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # start of our apps
     'mainapp.apps.MainappConfig',
-    'chat.apps.ChatsConfig',
+    'chats.apps.ChatsConfig',
     'moderation.apps.ModerationConfig',
     'listings.apps.ListingsConfig',
     'reviews.apps.ReviewsConfig',
