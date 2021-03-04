@@ -1,11 +1,11 @@
 from django.db import models
 from users.models import Profile
+from django.urls import reverse
 
 class Module(models.Model):
     #Django cannot have composite primary keys, thus, using auto increment for pri key
     moduleID = models.AutoField(primary_key = True)
 
-    #If school is deleted, then module is also deleted
     moduleCode = models.CharField(max_length=20, unique=True)
     moduleName = models.CharField(max_length=200)
 
@@ -26,14 +26,21 @@ class Listing(models.Model):
     # Get user from profile, if profile is deleted, the listings will also be deleted
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     
+    studentChoices = (
+        ('Tutor', 'Tutor'),
+        ('Tutee', 'Tutee')
+    )
     # Either Tutor or Tutee
-    typeOfStudent = models.CharField(max_length=10)
+    typeOfStudent = models.CharField(max_length=10, verbose_name=('Tutor/Tutee'), choices=studentChoices)
 
     # Once tutor wants to stop teaching, can close tuition listing
     closed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.listingID}: {self.title}"
+
+    def get_absolute_url(self):
+        return reverse('listing-detail', kwargs={'pk': self.pk})
 
 
 class TuitionSession(models.Model):

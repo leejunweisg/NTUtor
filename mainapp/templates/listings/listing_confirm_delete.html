@@ -1,0 +1,59 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Create Tuition Listing {% endblock title %}
+
+{% block content %}
+
+    <!-- Header -->
+    <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" 
+         style="min-height: 400px; background-size: cover; background-position: center top;">
+      <!-- Mask -->
+      <span class="mask bg-gradient-default opacity-8"></span>
+      <!-- Header container -->
+      <div class="container-fluid d-flex align-items-center">
+        <div class="row">
+          <div class="col-lg-7 col-md-10">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="container-fluid mt--9">
+        <div class="col-xl-12 order-xl-1">
+          <div class="card bg-secondary shadow">
+            <div class="card-header bg-white border-0">
+              <div class="row align-items-center">
+                <div class="col-12">
+                  <h3 class="mb-0">Delete tuition listing</h3>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <form method = "POST">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                  <h2>Are you sure you want to delete the tuition listing?</h2>
+                  <h2>Title: {{ object.title }}</h2>
+                  <h3>Posted on: {{ object.datePosted }}</h3>
+                  <h3>Description: {{ object.description }}</h3>
+                </fieldset>
+                <div class="form-group">
+                  <button class="btn btn-danger" type="submit">Delete Listing</button>
+                  <a class="btn btn-dark" href="{% url 'listing-detail' object.pk %}">Cancel</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% include "includes/footer.html" %}
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}{% endblock javascripts %}

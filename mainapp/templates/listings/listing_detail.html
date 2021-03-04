@@ -1,0 +1,130 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+    <!-- Header -->
+    <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" 
+         style="min-height: 400px;background-size: cover; background-position: center top;">
+      <!-- Mask -->
+      <span class="mask bg-gradient-default opacity-8"></span>
+    </div>
+    <div class="container-fluid mt--9">
+      <div class="row">
+        <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
+          <div class="card card-profile shadow">
+            <div class="row justify-content-center">
+              <div class="col-lg-3 order-lg-2">
+                <div class="card-profile-image">
+                  <a href="#">
+                    <img src="/static/assets/img/theme/team-4-800x800.jpg" class="rounded-circle">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+            </div>
+            <div class="card-body pt-0 pt-md-4">
+              <div class="row">
+                <div class="col">
+                  <div class="card-profile-stats d-flex justify-content-center mt-md-5">
+                    <div>
+                      {% if studentProfile.avgRatingTutor != 'N/A' %} 
+                      <span class="heading">{{ studentProfile.avgRatingTutor }} / 5</span>
+                      {% else %}
+                      <span class="heading">{{ studentProfile.avgRatingTutor }} </span>
+                      {% endif %}
+                      <span class="description">As a tutor</span>
+                    </div>
+                    <div>
+                      {% if studentProfile.avgRatingTutor != 'N/A' %} 
+                      <span class="heading">{{ studentProfile.avgRatingTutee }} / 5</span>
+                      {% else %}
+                      <span class="heading">{{ studentProfile.avgRatingTutee }} </span>
+                      {% endif %}
+                      <span class="description">As a tutee</span>
+                    </div>
+                    <div>
+                      <span class="heading">{{ studentProfile.totalListings }}</span>
+                      <span class="description">Tuition Listings</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <h3>
+                  {{ studentProfile.name }}
+                </h3>
+                <div class="h4 font-weight-300">Username: {{ studentProfile.username }}</div>
+                <div class="h4 font-weight-300">Email: {{ studentProfile.email }}</div>
+                <hr class="my-4" />
+                {% if studentProfile.description != None %} 
+                <p>{{ studentProfile.description }}</p>
+                {% else %}
+                <p></p>
+                {% endif %}
+
+                <!-- Link to profile -->
+                <a class="h4 font-weight-300" href="#">View Profile</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-8 order-xl-1">
+          <div class="card bg-secondary shadow">
+            <div class="card-body">
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-10">
+                      <div class="form-group">
+                        <h2>{{object.title}}</h3>
+                      </div>
+                    </div>
+                    <div class="col-lg-2">
+                      <a class="btn btn-primary" href="#">Chat</a>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <span class="heading">Module: {{object.module}}</span>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <span class="heading">Tutor/Tutee: {{object.typeOfStudent}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="form-group">
+                        <span class="heading">Posted on: {{object.datePosted}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr class="my-3" />
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <span class="heading" for="input-address">Description</span>
+                        <p>{{object.description}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% include "includes/footer.html" %}
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}{% endblock javascripts %}
