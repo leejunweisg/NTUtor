@@ -32,7 +32,7 @@ def user_list(request, pk=None):
 
 # Message View
 @csrf_exempt
-def message_list(request, sender=None, receiver=4, listingID=None):
+def message_list(request, sender=None, receiver=None, listingID=None):
     """
     List all required messages, or create a new message.
     """
