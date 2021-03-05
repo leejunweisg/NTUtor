@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %} Profile {% endblock title %}
+{% block title %} Tuition Listing Details {% endblock title %}
 
 {% block content %}
     <!-- Header -->
@@ -75,14 +75,23 @@
             <div class="card-body">
                 <div class="pl-lg-4">
                   <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-lg-8">
                       <div class="form-group">
                         <h2>{{object.title}}</h3>
                       </div>
                     </div>
+                    {% if user.username == studentProfile.username %}
                     <div class="col-lg-2">
+                      <a class="btn btn-primary" href="{% url 'listing-update' object.pk %}">Edit</a>
+                    </div>
+                    <div class="col-lg-2">
+                      <a class="btn btn-danger" href="{% url 'listing-delete' object.pk %}">Delete</a>
+                    </div>
+                    {% else %}
+                    <div class="col-lg-4">
                       <a class="btn btn-primary" href="#">Chat</a>
                     </div>
+                    {% endif %}
                   </div>
                   <div class="row">
                     <div class="col-lg-6">
