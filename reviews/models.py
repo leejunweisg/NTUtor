@@ -3,6 +3,9 @@ from users.models import Profile
 from listings.models import TuitionSession
 from django.utils import timezone
 
+from django.urls import reverse
+from django.shortcuts import redirect
+
 
 class Review(models.Model):
     reviewID = models.AutoField(primary_key=True)
@@ -19,5 +22,10 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.reviewID}"
+
+    def get_absolute_url(self):
+        return reverse('reviews',kwargs={})
+       
+        
 
    

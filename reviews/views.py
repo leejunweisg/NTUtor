@@ -46,7 +46,7 @@ class ReviewCreateView(LoginRequiredMixin,CreateView):
     model = Review
     template_name = 'reviews/review_form.html'
     fields = [ 'tuitionSession','reviewee','description','rating']
-    success_url = 'reviews/'
+    #success_url = 'reviews/'
     def form_valid(self,form):
             my_p = Profile.objects.get(user_id=self.request.user)
             form.instance.reviewer = my_p;
@@ -60,7 +60,7 @@ class ReviewUpdateView(LoginRequiredMixin,UpdateView):
     model = Review
     template_name = 'reviews/review_form.html'
     fields = [ 'tuitionSession','reviewee','description','rating']
-    success_url = '../../'
+    #success_url = '../../'
    
     def form_valid(self,form):
         my_p = Profile.objects.get(user_id=self.request.user)
