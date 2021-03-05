@@ -1,0 +1,101 @@
+	{% extends 'layouts/base.html' %}
+
+	{% block title %}Chat History{% endblock title %}
+
+	{% block content %} 
+
+	{% load static %} 
+       
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="{% static 'assets/css/style.css' %}"  media="screen,projection"/>
+	
+	<!--<link type="text/css" rel="stylesheet" href="{% static 'assets/css/materialize.min.css' %}"  media="screen,projection"/> -->
+	
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="{% static 'assets/js/materialize.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/chat.js' %}"></script>
+	
+  <!-- Header -->
+    <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" 
+         style="min-height: 600px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+      <!-- Mask -->
+      <span class="mask bg-gradient-default opacity-8"></span>
+      <!-- Header container -->
+      <div class="container-fluid d-flex align-items-center">
+        <div class="row">
+          <div class="col-lg-7 col-md-10">
+            <h1 class="display-2 text-white", width = "100px">Chat History</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	<div class="container-fluid mt--7">  
+		<div class="section" style="height: 80vh">  
+			<div class="row">		
+				<div class="col s3">
+					<div class="card">
+						<div class="collection">
+							<!-- to be updated to only show user chat history instead of all users-->
+							{% for user in users %}
+							<a href="{% url 'chat' request.user.id user.id %}" id="user{{ user.id }}" class="collection-item row">
+								<!--add profile picture-->
+								<!--<img src="https://frontend-1.adjust.com/new-assets/images/site-images/interface/user.svg" class="col s4">-->
+								<div class="col s8">
+								<span class="title" style="font-weight: bolder">{{ user.username }}</span>
+								</div>
+							</a>
+							{% endfor %}
+						</div>
+					</div>
+				</div>		
+			<div class="col s9">
+				<div class="card">
+					<div id="board" class="section grey lighten-3" style="height: 68vh; padding: 5px; overflow-y: scroll">
+						{% block messages %}
+						{% endblock %}
+					</div>
+					<form id="chat-box" class="form-group {% block hide %}hide{% endblock %}" method="post">
+						{% csrf_token %}
+						<div class="row">
+							<div class="col s11">
+								<div class="input-field">
+									<input class="form-control form-control-alternative" placeholder="Type your message.." type="text" input id="id_message">
+									<!--<input id="id_message" name="message" type="text" placeholder="Type your message..">-->
+								</div>
+							</div>
+							<div class="col s11" style="line-height: 50px" align='right'>
+								<!--<button class="btn btn-primary"><i class="material-icons">send</i></button>-->
+								<button class="btn btn-floating blue waves-effect waves-light"><i class="material-icons">send</i></button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+<!-- Function below to be put where chat button is to send listingID, sender_id and receiver_id. -->
+    <script>
+
+        // For receiving, set global variables to be used by the 'receive' function
+        sender_id = "{{ receiver.id }}"; //Context variable for receiver
+        receiver_id = "{{ request.user.id }}"; //Context variable for current logged in user
+		//listing_id = "{{ request.listing.id }}";
+		
+        //For sending
+        $(function () {
+            scrolltoend(); // Function to show the latest message, which is at the bottom of the message box, by scrolling to the end
+            //Handling the submit event to send the message.
+            $('#chat-box').on('submit', function (event) {
+                event.preventDefault();
+                var message = $('#id_message');
+				//change listing_id to request.listing.id? not sure. need get listing id dynamically when chat button clicked.
+				//TO BE EDITED WHEN MERGED!!
+                send('2','{{ request.user.username }}', '{{ receiver.username }}', message.val()); //Send function will be defined within 'chat.js'
+                message.val(''); //Clear content of the the input field after sending
+            })
+        })
+    </script>
+	
+	{% endblock content %}

@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	#other apps for chat 
+	'widget_tweaks',
+	'rest_framework'
 ]
 
 MIDDLEWARE = [
