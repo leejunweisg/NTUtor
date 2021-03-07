@@ -7,10 +7,14 @@
 <!-- Header -->
 <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
   <div class="container-fluid">
+
+    <!-- Print django flash messages -->
+    {% include "includes/messages.html" %}
+
     <div class="header-body">
       <div class="row">
         <div class="col-lg-3 float-left">
-          <a href="{% url 'listing-create' %}" class="btn btn-sm btn-secondary mb-3 ml-3 p-3 ">Create New Tuition
+          <a href="{% url 'listing-create' %}" class="btn btn-sm btn-secondary mb-3 p-3 ">Create New Tuition
             Listing</a>
         </div>
         <div class="col-lg-9 float-right">
@@ -75,7 +79,7 @@
           </div>
         </div>
       </div>
-      <h3 class="mb-32">Top rated tutors</h3>
+      <h3 class="mb-32 text-white">Top rated tutors</h3>
       <!-- Top rated tutors -->
       <div class="row">
         <div class="col-xl-3 col-lg-6">
