@@ -32,7 +32,7 @@ def user_list(request, pk=None):
 
 # Message View
 @csrf_exempt
-def message_list(request, sender=None, receiver=None, listingID=None):
+def message_list(request, sender=None, receiver=4, listingID=None):
     """
     List all required messages, or create a new message.
     """
@@ -61,10 +61,11 @@ def chat_view(request):
     if request.method == "GET":
         #print("chat.html")
         return render(request, 'chat/chat_history.html', 
-                      {'users': User.objects.exclude(username=request.user.username)}) #Returning context for all users except the current logged-in user
-					  
-						
-# to be removed in future...						
+                      {'users': User.objects.exclude(username=request.user.username), #Returning context for all users except the current logged-in user
+					  'messages': Message.objects.filter(message__isnull=False),
+					  'listing': Listing.objects.all()}) 
+
+# TO be removed in future...			
 def message_view(request, sender, receiver): 
     """Render the template with required context variables"""
     if not request.user.is_authenticated:
@@ -74,8 +75,9 @@ def message_view(request, sender, receiver):
         return render(request, "chat/messages.html",
                       {'users': User.objects.exclude(username=request.user.username), #List of users
                        'receiver': User.objects.get(id=receiver), # Receiver context user object for using in template
-                       'messages': Message.objects.filter(sender_id=sender, receiver_id=receiver) |
-                                   Message.objects.filter(sender_id=receiver, receiver_id=sender)}) # Return context with message objects where users are either sender or receiver.
+                       'messages': Message.objects.filter(sender_id=sender, receiver_id=receiver) | 
+								   Message.objects.filter(sender_id=receiver, receiver_id=sender)}) 
+								  
 								   
 # View to render template for sending and receiving messages	
 # Takes arguments 'listingID' ,'sender' and 'receiver' to identify the message list to return
@@ -86,8 +88,9 @@ def message_listing_view(request, sender, receiver, listingID):
     if request.method == "GET":
        # print("messages.html")
         return render(request, "chat/chat.html",
-                      {'users': User.objects.exclude(username=request.user.username), #List of users
+                      {'listing_id' : listingID,
+					   'users': User.objects.exclude(username=request.user.username), #List of users
                        'receiver': User.objects.get(id=receiver), # Receiver context user object for using in template
                        'messages': Message.objects.filter(listingID=listingID,sender_id=sender, receiver_id=receiver) |
                                    Message.objects.filter(listingID=listingID,sender_id=receiver, receiver_id=sender), # Return context with message objects where users are either sender or receiver.
-						'listing': Listing.objects.get(listingID = listingID)}) # Receiver context listing object for using in template. Currently not in used yet on template. For Design stage....
+						'listing': Listing.objects.get(listingID = listingID)}) 
