@@ -19,7 +19,7 @@
               </div>
 
               <div class="text-center mb-4">
-                Access denied - Contact support or <a href="{% url 'login' %}"><small>AUTHENTICATE</small></a>.
+                <span class='text-danger'>Access denied!</span><br>You are not authorized to access this page!
               </div>
 
             </div>
@@ -27,9 +27,6 @@
           <div class="row mt-3">
             <div class="col-6">
               <a href="{% url 'login' %}" class="text-light"><small>LOGIN</small></a>
-            </div>
-            <div class="col-6 text-right">
-              <a href="https://appseed.us/support" class="text-light"><small>Get Support</small></a>
             </div>
           </div>
         </div>

@@ -1,0 +1,110 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Moderation - Home {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- Header -->
+<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
+    style="min-height: 600px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+    <!-- Mask -->
+    <span class="mask bg-gradient-default opacity-8"></span>
+    <!-- Header container -->
+    <div class="container-fluid d-flex align-items-center">
+        <div class="row">
+            <div class="col-lg-7 col-md-10">
+                <h1 class="display-2 text-white">Hello {{ request.user.username }},</h1>
+                <p class="text-white mt-0 mb-5">This is the moderation dashboard. Here, you'll have an overview of all
+                    moderation-related tasks.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Body -->
+<div class="container-fluid mt--7">
+
+    <!-- Print django flash messages -->
+    {% include "includes/messages.html" %}
+
+    <div class="row">
+        <div class="col-xl-12 order-xl-1">
+            <div class="card bg-secondary shadow">
+                <div class="card-header bg-white border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Moderation Tasks</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h6 class="heading-small text-muted mb-4">Verified Requests</h6>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                          <thead class="thead-light">
+                            <tr>
+                              <!--<th scope="col">Date of Request</th>-->
+                              <th scope="col">Username</th>
+                              <th scope="col"># of Tuition Sessions</th>
+                              <th scope="col"># of Reviews</th>
+                              <th scope="col">Average Rating</th>
+                              <th scope="col">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <!-- Populate requests table -->
+                            {% if verified_requests|length == 0 %}
+                                <tr><td colspan="7">There are no requests at this time.</td></tr>
+                            {% else %}
+                            {% for person in verified_requests %}
+                            <tr>
+                              <!--<th scope="row">
+                                <div class="media align-items-center">
+                                  <div class="media-body">
+                                    <span class="mb-0 text-sm">1/1/2021</span>
+                                  </div>
+                                </div>
+                              </th>-->
+                              <!-- Username -->
+                              <td>{{ person.username }}</td>
+                              <!-- No. of tuition sessions completed -->
+                              <td>{{ person.n_sessions }}</td>
+                              <!-- No. of reviews -->
+                              <td>{{ person.n_reviews }}</td>
+                              <!-- Avg Rating -->
+                              <td>{{person.avg_rating}}</td>
+                              <!-- Actions -->
+                              <td>
+                                <div class="d-flex align-items-center">
+                                    <!--TODO: Link profile page appropriately -->
+                                    <a class="btn btn-primary" href="profile/{{person.username}}">View Profile</a>
+                                    <!-- TODO: Create url routes and view that takes in username variable -->
+                                    <a class="btn btn-success" href="{% url 'approve' person.username %}">Approve</a>
+                                    <a class="btn btn-danger" href="{% url 'reject' person.username %}">Reject</a>
+                                </div>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                          </tbody>
+                        </table>
+                      </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "includes/footer.html" %}
+
+</div>
+
+
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

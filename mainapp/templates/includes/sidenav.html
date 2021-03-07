@@ -109,9 +109,20 @@
             </a>
           </li>
         </ul>
-        <!-- Divider -->
+
+        <!-- Only display Moderation Home link on nav bar if user is a moderator -->
+        {% for group in request.user.groups.all %}
+        {% if group.name == 'Moderators' %}
         <hr class="my-3">
+        <h5>Moderator</h5>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link {% if 'moderation-home' in segment %} active {% endif %}" href="{% url 'moderation-home' %}"> <i class="ni ni-tv-2 text-primary"></i>Moderation Home</a>
+          </li>
         </ul>
+        {% endif %}
+        {% endfor %}
+        
       </div>
     </div>
   </nav>
