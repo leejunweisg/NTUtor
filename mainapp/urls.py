@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 from reviews import views as review_views
@@ -8,15 +8,8 @@ from reviews.views import ReviewListView, ReviewCreateView, ReviewUpdateView, Re
 urlpatterns = [
     path('', views.home, name='home'),
     path('refreshmodules1236172', views.refresh_modules, name='refresh-modules'), # do not go to this URL unnecessarily
+    path('',include('reviews.urls'))
 
-
-
-    #class call using database data of reviews
-    path('reviews/', ReviewListView.as_view(), name='reviews'),
-    #class call for using database data
-    path('reviews/new/', ReviewCreateView.as_view(), name='review-create'),
-    path('reviews/<int:pk>/update/', ReviewUpdateView.as_view(), name='review-update'),
-    path('reviews/<int:pk>/delete/', ReviewDeleteView.as_view(), name='review-delete')
     
 
 ]
