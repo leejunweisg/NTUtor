@@ -2,13 +2,12 @@ from django.urls import path
 
 from . import views
 from reviews import views as review_views
-from reviews.views import ReviewListView, ReviewCreateView, ReviewUpdateView, ReviewDeleteView,ReviewListViewByUsername
+from reviews.views import ReviewListView, ReviewCreateView, ReviewUpdateView, ReviewDeleteView
 
 
 urlpatterns = [
     #class call using database data of reviews
-    path('allreviews/', ReviewListView.as_view(), name='reviews'),
-    path('reviews/<int:tutorid>/', ReviewListViewByUsername.as_view(), name='reviews-username'),
+    path('reviews/', ReviewListView.as_view(), name='reviews'),
     #class call for using database data
     path('reviews/new/', ReviewCreateView.as_view(), name='review-create'),
     path('reviews/<int:pk>/update/', ReviewUpdateView.as_view(), name='review-update'),
