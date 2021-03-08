@@ -1,0 +1,45 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <!-- Header -->
+    <div class="header bg-gradient-primary pb-1 pt-5 pt-md-8">
+    </div>
+        <div class="container-fluid pt-1">
+          
+          <!-- Print django flash messages -->
+          {% include "includes/messages.html" %}
+  
+          <div class="header-body">
+            
+            <div class="content-section">
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Post a review</legend>
+                        {{ form|crispy }}
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" type="submit">Submit</button>
+                        {% if object.pk != null %}
+                        <a class="btn btn-danger" href="{% url 'review-delete' object.pk %}">Delete</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+            
+          </div>
+        </div>
+     
+
+   
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}{% endblock javascripts %}
