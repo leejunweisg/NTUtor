@@ -24,7 +24,8 @@ class Review(models.Model):
         return f"{self.reviewID}"
 
     def get_absolute_url(self):
-        return reverse('reviews')
+        sel = self
+        return reverse('reviews-username',kwargs={'tutorid':self.reviewee_id})
        
         
 
