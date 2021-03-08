@@ -190,7 +190,6 @@
                 <th scope="col">Tutor/Tutee</th>
                 <th scope="col">Ratings</th>
                 <th scope="col">Date Posted</th>
-                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -202,8 +201,7 @@
               {% for listing in tuitionListings%}
               <tr>
                 <th scope="row">
-                  <span class="mb-0 text-sm">{{listing.title}}</span>
-
+                  <a class="mb-0 text-sm" href="{% url 'listing-detail' listing.id %}">{{listing.title}}</a>
                 </th>
                 <td>
                   {{listing.module}}
@@ -223,18 +221,6 @@
                 </td>
                 <td>
                   {{listing.datePosted}}
-                </td>
-                <td class="text-right">
-                  <div class="dropdown">
-                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown"
-                      aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                      <a class="dropdown-item" href="{% url 'listing-detail' listing.id %}">Open Listing</a>
-                      <a class="dropdown-item" href="{% url 'chat' user.id listing.poster_id listing.id %}">Chat</a>
-                    </div>
-                  </div>
                 </td>
               </tr>
             </tbody>

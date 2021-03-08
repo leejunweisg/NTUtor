@@ -25,6 +25,19 @@
             <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
             </div>
             <div class="card-body pt-0 pt-md-4">
+              {% if studentProfile.verified == 1 %}
+              <div class="row">
+                <div class="col">
+                  <div class="card-profile-stats d-flex justify-content-center mt-md-5">
+                    
+                    <span class="heading"> Verified </span>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+              {% else %}
+              {% endif %}
               <div class="row">
                 <div class="col">
                   <div class="card-profile-stats d-flex justify-content-center mt-md-5">
