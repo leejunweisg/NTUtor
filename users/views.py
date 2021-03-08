@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.http import HttpResponse
 
 from .forms import UserRegisterForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
+
 
 
 # Create your views here.
@@ -44,3 +46,10 @@ def register(request):
         form = UserRegisterForm()
 
     return render(request, 'accounts/register.html', {'form': form})
+
+def profile(request):
+    return render(request, 'users/profile.html')
+
+
+def editprofile(request):
+    return render(request, 'users/editprofile.html')
