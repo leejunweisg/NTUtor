@@ -25,7 +25,7 @@
                     </fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-danger" type="submit">Confirm delete</button>
-                        <a class="btn btn-outline-secondary" href="{% url 'reviews' %}" >Cancel</a>
+                        <a class="btn btn-outline-secondary" href="{% url 'reviews-username' object.reviewee.id %}" >Cancel</a>
                     </div>
                 </form>
             </div>

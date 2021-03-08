@@ -28,6 +28,29 @@ class ReviewListView(LoginRequiredMixin,ListView):
         return context
     #ordering = ['-date_posted']
 
+
+class ReviewListViewByUsername(LoginRequiredMixin,ListView):
+    
+    model = Review
+    template_name = 'reviews/listing-reviews-username.html'
+    context_object_name = 'reviews'
+    
+
+    def get_context_data(self,**kwargs):
+        context = super(ReviewListViewByUsername, self).get_context_data(**kwargs)
+        context['studentProfile'] = Profile.objects.get(user_id=self.request.user)
+        currentProfile = Profile.objects.get(user_id=self.request.user)
+        currentID = currentProfile.id
+        context['tutorid'] = self.kwargs['tutorid']
+
+        selectedUserid = self.kwargs['tutorid']
+        tutor = Profile.objects.get(id=selectedUserid)
+        
+        context['tutorName'] = tutor.name
+        return context
+
+    
+
 #creating a review to database, currently cannot auto populate the reviewer to current user automatically because of how
 #the model is created, requires a instance of a proile instead of a id
 #this uses crispy forms, added require in settings.py and additional information to use bootstrap4 for crispy
@@ -65,13 +88,13 @@ class ReviewUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
 class ReviewDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Review
     template_name = 'reviews/review_confirm_delete.html'
-    success_url = "/reviews/"
+    success_url = "/"
     def test_func(self):
         my_p = Profile.objects.get(user_id=self.request.user)
         if self.get_object().reviewer == my_p:
             return True
         return False
-        
+    
 
 
 
