@@ -232,7 +232,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                       <a class="dropdown-item" href="{% url 'listing-detail' listing.id %}">Open Listing</a>
-                      <a class="dropdown-item" href="#">Chat</a>
+                      <a class="dropdown-item" href="{% url 'chat' user.id listing.poster_id listing.id %}">Chat</a>
                     </div>
                   </div>
                 </td>

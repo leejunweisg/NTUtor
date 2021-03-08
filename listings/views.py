@@ -40,6 +40,7 @@ def getTuitionListings(studentType, moduleCode, moduleName, ratings):
         temp['typeOfStudent'] = r.typeOfStudent
         temp['datePosted'] = r.datePosted
         temp['username'] = r.user.user.username
+        temp['poster_id'] = r.user.user.id # added by sam
         temp['name'] = r.user.name
         temp['id'] = r.listingID
 
@@ -80,6 +81,7 @@ def getStudentDetails(username):
     studentDetails = Profile.objects.filter(user__username = username)
 
     for p in studentDetails:
+        studentDetailsList['id'] = p.user.id #added by sam
         studentDetailsList['username'] = p.user.username
         studentDetailsList['email'] = p.user.email
         studentDetailsList['name'] = p.name

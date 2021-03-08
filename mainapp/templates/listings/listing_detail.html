@@ -89,7 +89,7 @@
                     </div>
                     {% else %}
                     <div class="col-lg-4">
-                      <a class="btn btn-primary" href="#">Chat</a>
+                      <a class="btn btn-primary" href="{% url 'chat' user.id studentProfile.id object.pk %}">Chat</a>
                     </div>
                     {% endif %}
                   </div>
