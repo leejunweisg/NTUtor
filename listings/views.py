@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.db.models import Avg
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from operator import itemgetter
 
 from .models import Listing, Module, TuitionSession
 from users.models import Profile
@@ -71,6 +72,35 @@ def getTuitionListings(studentType, moduleCode, moduleName, ratings):
         allListingsList = [i for i in allListingsList if int(i['avgRating']) >= int(ratings)]
 
     return allListingsList
+
+def getTopRatedTutors():
+    results = []
+
+    # retrieve profiles
+    for p in Profile.objects.all():
+        temp = {}
+
+        # get info
+        temp['username'] = p.user.username
+        temp['name'] = p.name
+        temp['verified'] = p.verified
+
+        # number of tuition sessions given
+        temp['n_sessions'] = TuitionSession.objects.filter(tutor=p, completed=True).count()
+
+        # number of reviews received
+        temp['n_reviews'] = Review.objects.filter(reviewee=p).count()
+
+        # avg rating
+        avg_rating = Review.objects.filter(reviewee=p).aggregate(Avg('rating'))['rating__avg']
+        temp['avgRating'] = avg_rating if avg_rating is not None else -1
+
+        results.append(temp)
+
+    results = sorted(results, key = itemgetter('avgRating'), reverse=True)
+    results = results[:3]
+    return results
+
 
 def getOneTuitionListing(listingID):
     listingInfo = Listing.objects.get(listingID = listingID)
