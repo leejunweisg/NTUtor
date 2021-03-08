@@ -30,3 +30,8 @@ You should see a ```(venv)``` in your terminal.
 6. Password: **********
    Password (again): *********
    Superuser created successfully.
+
+User Acc:
+Username:admin123
+password:password123!
+All cap sensitive 
