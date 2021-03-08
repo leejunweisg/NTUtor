@@ -1,0 +1,239 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Home {% endblock title %}
+
+{% block content %}
+
+<!-- Header -->
+<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+
+    <!-- Print django flash messages -->
+    {% include "includes/messages.html" %}
+
+    <div class="header-body">
+      <div class="row">
+        <div class="col-lg-3 float-left">
+          <a href="{% url 'listing-create' %}" class="btn btn-sm btn-success mb-3 p-3 ">Create New Listing</a>
+        </div>
+      </div>
+
+      <!-- Top rated tutors -->
+      <h3 class="mb-32 text-white">Top Rated Tutors</h3>
+      <div class="row">
+        {% for tutor in top3Tutors %}
+        <div class="col-xl-4 col-lg-6">
+          <div class="card card-stats mb-3 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                    <!-- Link to profile -->                
+                    <a class="card-title text-uppercase text-muted mb-0 pb-0" href="{% url 'profile' tutor.username %}">
+                    {% if tutor.name == None %}
+                      @{{tutor.username}}
+                    {% else %}
+                      {{tutor.name}}
+                    {% endif %}
+                    </a>
+                    {% if tutor.verified %}
+                    <i class="fa fa-check-circle text-info" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Verified Tutor"></i>
+                    {% endif %}
+                </div>
+                <div class="col-auto">
+                  <!-- Insert profile pic here -->
+                  <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                    <i class="fas fa-chart-pie"></i>
+                    
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <span class="h2 font-weight-bold mb-0">{{tutor.avg_rating}} / 5</span>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-nowrap">Average Rating</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid mt--7">
+
+  <!-- Search -->
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <h3 class="mb-0">Search Listings</h3>
+        </div>
+
+        <div class="card-body">
+          <!-- Search form -->
+          <form method="get" action="{% url 'search' %}">
+
+            <!-- Mod code, mod name  -->
+            <div class="row">
+              <div class="col-lg-2">
+                <div class="form-group">
+                  <label for="example-text-input" class="form-control-label">Module Code</label>
+                  <input class="form-control" type="text" placeholder ="e.g CZ3001" id="codeFilter" name="codeFilter">
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="example-text-input" class="form-control-label">Module Name</label>
+                  <input class="form-control" type="text" placeholder="e.g Advanced Computer Architecture" id="nameFilter" name="nameFilter">
+                </div>
+              </div>
+
+              <!-- Rating -->
+              <div class="col-lg-2">
+                <div class="form-group">
+                  <label for="example-text-input" class="form-control-label">Minimum Rating</label>
+                  <select class="form-control" id="ratingsFilter" name="ratingsFilter" selected="Any">
+                    <option>Any</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Listing Types -->
+              <div class="col-lg-2">
+                <div class="form-group">
+                  <label for="example-text-input" class="form-control-label">Types</label>
+
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="tuitionFilter" name="tuitionFilter" checked>
+                    <label class="custom-control-label" for="tuitionFilter">Tuition Listings </label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="requestFilter" name="requestFilter" checked>
+                    <label class="custom-control-label" for="requestFilter">Request Listings</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col text-right">
+                <button type="submit" class="btn btn-lg btn-secondary">Search</button>
+              </div>
+            </div>
+
+            <!-- -->
+            
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Latest Tuition Listings -->
+  <div class="row mt-4">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <h3 class="mb-0">Latest Tuition Listings</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Module</th>
+                <th scope="col">Student Name</th>
+                <th scope="col">Avg. Tutor Rating</th>
+                <th scope="col">Date Posted</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if tuitionListings|length == 0 %}
+              <tr><td colspan="7">There are no listings at this time.</td></tr>
+              {% else %}
+              {% for listing in tuitionListings%}
+              <tr>
+                <th scope="row"><a class="mb-0 text-sm" href="{% url 'listing-detail' listing.id %}">{{listing.title}}</a></th>
+                <td>{{listing.module}}</td>
+                <td>{{listing.name}}</td>
+                <td>
+                  {{listing.avg_rating}}
+                </td>
+                <td>{{listing.datePosted}}</td>
+              </tr>
+            </tbody>
+            {% endfor %}
+            {% endif %}
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Latest Request Listings -->
+  <div class="row mt-4">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <h3 class="mb-0">Latest Request Listings</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Module</th>
+                <th scope="col">Student Name</th>
+                <th scope="col">Avg. Tutee Rating</th>
+                <th scope="col">Date Posted</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if requestListings|length == 0 %}
+              <tr><td colspan="7">There are no listings at this time.</td></tr>
+              {% else %}
+              {% for listing in requestListings%}
+              <tr>
+                <th scope="row">
+                  <a class="mb-0 text-sm" href="{% url 'listing-detail' listing.id %}">{{listing.title}}</a>
+                </th>
+                <td>{{listing.module}}</td>
+                <td>{{listing.name}}</td>
+                <td>
+                  {{listing.avg_rating}}
+                </td>
+                <td>{{listing.datePosted}}</td>
+              </tr>
+            {% endfor %}
+            {% endif %}
+          </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "includes/footer.html" %}
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

@@ -15,14 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from users import views as user_views
-from users.forms import CustomLoginForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/', user_views.register, name='register'),
-    path('login/', user_views.LoginFormView.as_view(authentication_form=CustomLoginForm), name='login'), # built-in class-based views
-    path('logout/', user_views.LogoutFormView.as_view(), name='logout'), # built-in class-based views
-    path('', include('mainapp.urls')), # include urls.py from mainapp!
-    path('users/', include('users.url')),
+    path('', include('mainapp.urls')), # general pages (login, logout, register, 404/403 pages, refreshmod)
+    path('', include('listings.urls')), # home page resides here
+    path('', include('moderation.urls')),
+	path('', include('chats.urls')),
+    path('', include('users.urls')),
+    path('', include('reviews.urls')),
 ]

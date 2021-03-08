@@ -1,0 +1,211 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Tuition Listings {% endblock title %}
+
+{% block content %}
+
+<!-- Header -->
+<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+
+    <!-- Print django flash messages -->
+    {% include "includes/messages.html" %}
+
+  </div>
+</div>
+
+<div class="container-fluid mt--7">
+
+    <!-- Search -->
+    <div class="row">
+      <div class="col">
+        <div class="card shadow">
+          <div class="card-header border-0">
+            <h3 class="mb-0">Search Listings</h3>
+          </div>
+  
+          <div class="card-body">
+            <!-- Search form -->
+            <form method="get" action="{% url 'search' %}">
+  
+              <!-- Mod code, mod name  -->
+              <div class="row">
+                <div class="col-lg-2">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Module Code</label>
+                    <input class="form-control" type="text" placeholder ="e.g CZ3001" id="codeFilter" value="{{codeFilterQuery}}" name="codeFilter">
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Module Name</label>
+                    <input class="form-control" type="text" placeholder="e.g Advanced Computer Architecture" id="nameFilter" value= "{{nameFilterQuery}}" name="nameFilter">
+                  </div>
+                </div>
+  
+                <!-- Rating -->
+                <div class="col-lg-2">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Minimum Rating</label>
+                    <select class="form-control" id="ratingsFilter" name="ratingsFilter">
+                      {% if ratingsFilterQuery == 'Any'%}
+                      <option selected>Any</option>
+                      {% else %}
+                      <option>Any</option>
+                      {% endif %}
+                      {% if ratingsFilterQuery == '1'%}
+                      <option selected>1</option>
+                      {% else %}
+                      <option>1</option>
+                      {% endif %}
+                      {% if ratingsFilterQuery == '2'%}
+                      <option selected>2</option>
+                      {% else %}
+                      <option>2</option>
+                      {% endif %}
+                      {% if ratingsFilterQuery == '3'%}
+                      <option selected>3</option>
+                      {% else %}
+                      <option>3</option>
+                      {% endif %}
+                      {% if ratingsFilterQuery == '4'%}
+                      <option selected>4</option>
+                      {% else %}
+                      <option>4</option>
+                      {% endif %}
+                      {% if ratingsFilterQuery == '5'%}
+                      <option selected>5</option>
+                      {% else %}
+                      <option>5</option>
+                      {% endif %}
+                    </select>
+                  </div>
+                </div>
+  
+                <!-- Listing Types -->
+                <div class="col-lg-2">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Types</label>
+  
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="tuitionFilter" name="tuitionFilter" checked>
+                      <label class="custom-control-label" for="tuitionFilter">Tuition Listings </label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="requestFilter" name="requestFilter" checked>
+                      <label class="custom-control-label" for="requestFilter">Request Listings</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="col text-right">
+                  <button type="submit" class="btn btn-lg btn-secondary">Search</button>
+                </div>
+              </div>
+              
+            </form>
+  
+          </div>
+  
+        </div>
+      </div>
+    </div>
+
+  <!-- Table -->
+  <div class="row mt-4">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <h3 class="mb-0">Search Results</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Module</th>
+                <th scope="col">Student Name</th>
+                <th scope="col">Listing Type</th>
+                <th scope="col">Avg Rating</th>
+                <th scope="col">Date Posted</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if tuitionListings|length == 0 %}
+              <tr>
+                <td colspan="7">There are no listings at this time.</td>
+              </tr>
+              {% else %}
+              {% for listing in tuitionListings%}
+              <tr>
+                <th scope="row">
+                  <a class="mb-0 text-sm" href="{% url 'listing-detail' listing.id %}">{{listing.title}}</a>
+                </th>
+                <td>
+                  {{listing.module}}
+                </td>
+                <td>
+                  {{listing.name}}
+                </td>
+                <td>
+                  {{listing.typeOfStudent}}
+                </td>
+                <td>
+                  {% if listing.avgRating == -1 %}
+                  N/A
+                  {% else %}
+                  {{listing.avgRating}}
+                  {% endif %}
+                </td>
+                <td>
+                  {{listing.datePosted}}
+                </td>
+              </tr>
+            </tbody>
+            {% endfor %}{% endif %}
+          </table>
+
+        </div>
+        <div class="card-footer py-4">
+          {% if tuitionListings.has_other_pages %}
+          <nav aria-label="...">
+            
+            <ul class="pagination justify-content-end mb-0">
+            {% if tuitionListings.has_previous %}
+              <li class="page-item"><a class="page-link" href = "?page={{tuitionListings.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+              <li class ="page-item disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in tuitionListings.paginator.page_range %}
+              {% if tuitionListings.number == i %}
+                <li class="page-item active"><span> {{i}} <span class="sr-only">(current)</span> </span></li>
+              {% else %}
+                <li><a class="page-link" href = "?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+            {% endfor %}
+            {% if tuitionListings.has_next %}
+              <li class="page-item"><a class="page-link" href = "?page={{ tuitionListings.next_page_number }}">&raquo;</a></li>
+            {% else %}
+              <li class ="page-item disabled"><span>&raquo;</span></li>
+            {% endif %}
+              
+            </ul>
+          </nav> 
+          {% endif %}
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  {% include "includes/footer.html" %}
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}
