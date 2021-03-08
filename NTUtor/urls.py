@@ -23,5 +23,6 @@ urlpatterns = [
     path('register/', user_views.register, name='register'),
     path('login/', user_views.LoginFormView.as_view(authentication_form=CustomLoginForm), name='login'), # built-in class-based views
     path('logout/', user_views.LogoutFormView.as_view(), name='logout'), # built-in class-based views
-    path('', include('mainapp.urls')) # include urls.py from mainapp!
+    path('', include('mainapp.urls')), # include urls.py from mainapp!
+    path('users/', include('users.url')),
 ]
