@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger 
 from listings.utility import fetch_modules, populate_modules
 from listings import views as listing_views
 
@@ -34,8 +35,24 @@ def home(request):
     if nameFilterQuery is None:
         nameFilterQuery = ''
 
+    tuitionListings = listing_views.getTuitionListings(studentType, codeFilterQuery, nameFilterQuery, ratingsFilterQuery)
+    
+    page = request.GET.get('page', 1)
+    # Set how many listings per page
+    paginator = Paginator(tuitionListings, 10)
+    
+    try:
+        tuitionListings = paginator.page(page)
+    except PageNotAnInteger:
+        tuitionListings = paginator.page(1)
+    except EmptyPage:
+        tuitionListings = paginator.page(paginator.num_pages)
+
+    top3List = listing_views.getTopRatedTutors()
+    
     context = {
-        'tuitionListings': listing_views.getTuitionListings(studentType, codeFilterQuery, nameFilterQuery, ratingsFilterQuery),
+        'top3Tutors' : top3List,
+        'tuitionListings': tuitionListings,
         'ratingsFilterQuery': ratingsFilterQuery,
         'codeFilterQuery': codeFilterQuery,
         'nameFilterQuery': nameFilterQuery
