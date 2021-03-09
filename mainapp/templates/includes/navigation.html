@@ -3,7 +3,7 @@
     <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
       <div class="container-fluid">
         <!-- Brand -->
-        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="/">Dashboard</a>
+        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="/">NTUTOR</a>
         <!-- Form -->
         <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
           <div class="form-group mb-0">
@@ -21,7 +21,7 @@
             <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <div class="media align-items-center">
                 <span class="avatar avatar-sm rounded-circle">
-                  <img alt="Image placeholder" src="/static/assets/img/theme/team-4-800x800.jpg">
+                  <img alt="Image placeholder" src="{{ request.user.profile.image.url }}">
                 </span>
                 <div class="media-body ml-2 d-none d-lg-block">
                   <span class="mb-0 text-sm  font-weight-bold">
@@ -34,13 +34,17 @@
               <div class=" dropdown-header noti-title">
                 <h6 class="text-overflow m-0">Welcome!</h6>
               </div>
-              <a href=./users/viewprofile class="dropdown-item">
+              <a href="{% url 'profile' request.user.username %}" class="dropdown-item">
                 <i class="ni ni-single-02"></i>
                 <span>My profile</span>
               </a>
               <a href="{% url 'chats' %}" class="dropdown-item">
-                <i class="ni ni-settings-gear-65"></i>
+                <i class="far fa-comment"></i>
                 <span>Chats</span>
+              </a>
+              <a href="{% url 'want-verified' %}" class="dropdown-item">
+                <i class="fa fa-check-circle text-info"></i>
+                <span>Request Verified Status</span>
               </a>
               <div class="dropdown-divider"></div>
               <a href="{% url 'logout' %}" class="dropdown-item">
@@ -53,4 +57,3 @@
       </div>
     </nav>
     <!-- End Navbar -->
-

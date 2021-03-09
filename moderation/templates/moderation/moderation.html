@@ -80,7 +80,7 @@
                               <td>
                                 <div class="d-flex align-items-center">
                                     <!--TODO: Link profile page appropriately -->
-                                    <a class="btn btn-primary" href="profile/{{person.username}}">View Profile</a>
+                                    <a class="btn btn-primary" href="{% url 'profile' person.username %}">View Profile</a>
                                     <!-- TODO: Create url routes and view that takes in username variable -->
                                     <a class="btn btn-success" href="{% url 'approve' person.username %}">Approve</a>
                                     <a class="btn btn-danger" href="{% url 'reject' person.username %}">Reject</a>

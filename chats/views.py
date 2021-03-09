@@ -52,33 +52,32 @@ def message_list(request, sender=None, receiver=None, listingID=None):
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
 
-# View Listing the Users
-# Change to only history of users...(Function to be edited again)
+# View Chat History
 def chat_view(request):
     """Render the template with required context variables"""
     if not request.user.is_authenticated:
         return redirect('index')
     if request.method == "GET":
-        #print("chat.html")
+        h_list = get_history_list(request,Message.objects.all(),Listing.objects.all())
         return render(request, 'chat/chat_history.html', 
                       {'users': User.objects.exclude(username=request.user.username), #Returning context for all users except the current logged-in user
-					  'messages': Message.objects.filter(message__isnull=False),
-					  'listing': Listing.objects.all()}) 
+					  'listings': Listing.objects.all(),
+					  'history_list': h_list}) 
 
-# TO be removed in future...			
-def message_view(request, sender, receiver): 
-    """Render the template with required context variables"""
-    if not request.user.is_authenticated:
-        return redirect('index')
-    if request.method == "GET":
-		#print("messages.html")
-        return render(request, "chat/messages.html",
-                      {'users': User.objects.exclude(username=request.user.username), #List of users
-                       'receiver': User.objects.get(id=receiver), # Receiver context user object for using in template
-                       'messages': Message.objects.filter(sender_id=sender, receiver_id=receiver) | 
-								   Message.objects.filter(sender_id=receiver, receiver_id=sender)}) 
-								  
-								   
+# Function to get history list
+def get_history_list(request, messages, listings):
+	h_list = []
+	for message in messages:
+		for listing in listings:
+			if listing.listingID == message.listingID.pk:
+				if message.receiver_id == request.user.id:
+					value1 = int(str(request.user.id)+ str(message.sender_id) + str(message.listingID.pk)) 
+					h_list.append(value1)
+				elif message.sender_id == request.user.id:
+					value1 = int(str(request.user.id)+ str(message.receiver_id) + str(message.listingID.pk)) 
+					h_list.append(value1)
+	return list(set(h_list))						
+						
 # View to render template for sending and receiving messages	
 # Takes arguments 'listingID' ,'sender' and 'receiver' to identify the message list to return
 def message_listing_view(request, sender, receiver, listingID): 
@@ -86,7 +85,6 @@ def message_listing_view(request, sender, receiver, listingID):
     if not request.user.is_authenticated:
         return redirect('index')
     if request.method == "GET":
-       # print("messages.html")
         return render(request, "chat/chat.html",
                       {'listing_id' : listingID,
 					   'users': User.objects.exclude(username=request.user.username), #List of users
@@ -94,3 +92,14 @@ def message_listing_view(request, sender, receiver, listingID):
                        'messages': Message.objects.filter(listingID=listingID,sender_id=sender, receiver_id=receiver) |
                                    Message.objects.filter(listingID=listingID,sender_id=receiver, receiver_id=sender), # Return context with message objects where users are either sender or receiver.
 						'listing': Listing.objects.get(listingID = listingID)}) 
+	
+def message_view(request, sender, receiver): 
+    """Render the template with required context variables"""
+    if not request.user.is_authenticated:
+        return redirect('index')
+    if request.method == "GET":
+        return render(request, "chat/messages.html",
+                      {'users': User.objects.exclude(username=request.user.username), #List of users
+                       'receiver': User.objects.get(id=receiver), # Receiver context user object for using in template
+                       'messages': Message.objects.filter(sender_id=sender, receiver_id=receiver) | 
+								   Message.objects.filter(sender_id=receiver, receiver_id=sender)})

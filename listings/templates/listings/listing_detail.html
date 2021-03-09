@@ -11,49 +11,35 @@
     </div>
     <div class="container-fluid mt--9">
       <div class="row">
+
         <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
           <div class="card card-profile shadow">
             <div class="row justify-content-center">
               <div class="col-lg-3 order-lg-2">
                 <div class="card-profile-image">
-                  <a href="#">
-                    <img src="/static/assets/img/theme/team-4-800x800.jpg" class="rounded-circle">
-                  </a>
+                    <img src="{{ studentProfile.image.url }}" class="rounded-circle">
                 </div>
               </div>
             </div>
             <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
             </div>
             <div class="card-body pt-0 pt-md-4">
-              {% if studentProfile.verified == 1 %}
-              <div class="row">
-                <div class="col">
-                  <div class="card-profile-stats d-flex justify-content-center mt-md-5">
-                    
-                    <span class="heading"> Verified </span>
-                    
-                    
-                  </div>
-                </div>
-              </div>
-              {% else %}
-              {% endif %}
               <div class="row">
                 <div class="col">
                   <div class="card-profile-stats d-flex justify-content-center mt-md-5">
                     <div>
                       {% if studentProfile.avgRatingTutor != 'N/A' %} 
-                      <span class="heading">{{ studentProfile.avgRatingTutor }} / 5</span>
+                        <span class="heading">{{ studentProfile.avgRatingTutor }} / 5</span>
                       {% else %}
-                      <span class="heading">{{ studentProfile.avgRatingTutor }} </span>
+                        <span class="heading">{{ studentProfile.avgRatingTutor }} </span>
                       {% endif %}
                       <span class="description">As a tutor</span>
                     </div>
                     <div>
                       {% if studentProfile.avgRatingTutor != 'N/A' %} 
-                      <span class="heading">{{ studentProfile.avgRatingTutee }} / 5</span>
+                        <span class="heading">{{ studentProfile.avgRatingTutee }} / 5</span>
                       {% else %}
-                      <span class="heading">{{ studentProfile.avgRatingTutee }} </span>
+                        <span class="heading">{{ studentProfile.avgRatingTutee }} </span>
                       {% endif %}
                       <span class="description">As a tutee</span>
                     </div>
@@ -67,22 +53,28 @@
               <div class="text-center">
                 <h3>
                   {{ studentProfile.name }}
+                  {% if studentProfile.verified %}
+                    <i class="fa fa-check-circle text-info" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Verified Tutor"></i>
+                  {% endif %}
                 </h3>
-                <div class="h4 font-weight-300">Username: {{ studentProfile.username }}</div>
-                <div class="h4 font-weight-300">Email: {{ studentProfile.email }}</div>
-                <hr class="my-4" />
-                {% if studentProfile.description != None %} 
-                <p>{{ studentProfile.description }}</p>
-                {% else %}
-                <p></p>
-                {% endif %}
+                <div class="h4 font-weight-300">@{{ studentProfile.username }}</div>
+                <div class="h4 font-weight-300">{{ studentProfile.email }}</div>
+                <div class="h5 mt-4">
+                  <i class="ni business_briefcase-24 mr-2"></i>Description
+                </div>
+                {% if not studentProfile.desc == None %}
+                  <p>{{ studentProfile.desc }}</p>
+                  {% else %}
+                  <p>Nothing here...</p>
+                  {% endif %}
 
                 <!-- Link to profile -->
-                <a class="h4 font-weight-300" href="#">View Profile</a>
+                <a class="h4 font-weight-300 btn btn-info" href="{% url 'profile' studentProfile.username %}">View Profile</a>
               </div>
             </div>
           </div>
         </div>
+
         <div class="col-xl-8 order-xl-1">
           <div class="card bg-secondary shadow">
             <div class="card-body">
@@ -109,19 +101,19 @@
                   <div class="row">
                     <div class="col-lg-6">
                       <div class="form-group">
-                        <span class="heading">Module: {{object.module}}</span>
+                        <span class="heading">{{object.module}}</span>
                       </div>
                     </div>
                     <div class="col-lg-6">
                       <div class="form-group">
-                        <span class="heading">Tutor/Tutee: {{object.typeOfStudent}}</span>
+                        <span class="heading">Tutor/Tutee: {{object.typeOfListing}}</span>
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-lg-12">
                       <div class="form-group">
-                        <span class="heading">Posted on: {{object.datePosted}}</span>
+                        <span class="heading">{{object.datePosted}}</span>
                       </div>
                     </div>
                   </div>

@@ -1,6 +1,11 @@
+<!-- Used to pass messages from views to users -->
 {% if messages %}
 {% for message in messages%}
-<div class="alert alert-{{ message.tags }} grid-margin">{{ message }}<button type="button" class="close"
-    data-dismiss="alert">&times;</button></div>
+<div class="alert alert-{{ message.tags }} grid-margin">{{ message | safe}}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
 {% endfor %}
+{% endif %}
+
+<!-- Shown if the user hasn't completed filling up his profile after registration -->
+{% if request.user.profile.name == None %}
+<div class="alert alert-warning grid-margin font-weight-bold">Hi {{user.username}}, please <a class="alert-link" href="{% url 'edit-profile' %}">complete your profile!</a></div>
 {% endif %}
