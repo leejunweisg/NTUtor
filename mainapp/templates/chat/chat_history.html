@@ -39,7 +39,7 @@
 					{% else %} <!-- if got messages -->
 						<div class="collection">
 							{% for item in history_list %}
-							<a href="{% url 'chat' item|get_digit:'3' item|get_digit:'2' item|get_digit:'1' %}" id="user{{item|get_digit:'2'}}" class="collection-item row">
+							<a href="{% url 'chat' request.user.id item|get_digit:'2' item|get_digit:'1' %}" id="user{{item|get_digit:'2'}}" class="collection-item row">
 								<div class="col s8">
 								{% for user in users %}
 									{% if item|get_digit:'2' == user.id %}
