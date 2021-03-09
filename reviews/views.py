@@ -26,9 +26,9 @@ class ReviewListView(LoginRequiredMixin,ListView):
         #Add extra context, student profile
         context['studentProfile'] = Profile.objects.get(user_id=self.request.user)
         return context
-    #ordering = ['-date_posted']
 
 
+# view reviews by username, with tutorid int in the url for reference
 class ReviewListViewByUsername(LoginRequiredMixin,ListView):
     
     model = Review
@@ -54,6 +54,7 @@ class ReviewListViewByUsername(LoginRequiredMixin,ListView):
 #creating a review to database, currently cannot auto populate the reviewer to current user automatically because of how
 #the model is created, requires a instance of a proile instead of a id
 #this uses crispy forms, added require in settings.py and additional information to use bootstrap4 for crispy
+#----- old ---- creating forms with manual entering of tutor name
 class ReviewCreateView(LoginRequiredMixin,CreateView):
     model = Review
     template_name = 'reviews/review_form.html'
@@ -66,25 +67,32 @@ class ReviewCreateView(LoginRequiredMixin,CreateView):
 #https://stackoverflow.com/questions/35567667/cannot-assign-simplelazyobject-user-xxx-comment-user-must-be-a-mypro
 #for getting instance of user profile     
 
-        
-
+ 
+#update listing, takes in a tutorID from the url and use it for reference
 class ReviewUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Review
     template_name = 'reviews/review_form.html'
-    fields = [ 'tuitionSession','reviewee','description','rating']
-    #success_url = '../../'
+    fields = [ 'tuitionSession','description','rating']
    
     def form_valid(self,form):
         my_p = Profile.objects.get(user_id=self.request.user)
+        tutid = self.kwargs['tutorid']
+        tut_p = Profile.objects.get(id=tutid)
         form.instance.reviewer = my_p;
-        return super().form_valid(form);
+        form.instance.reviewee = tut_p;
+        return super().form_valid(form); 
     
     def test_func(self):
         my_p = Profile.objects.get(user_id=self.request.user)
         if self.get_object().reviewer == my_p:
             return True
         return False
-
+    def get_context_data(self,**kwargs):
+        context = super(ReviewUpdateView, self).get_context_data(**kwargs)
+        context['tutorid'] = self.kwargs['tutorid']
+        return context
+    
+#delete listing
 class ReviewDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Review
     template_name = 'reviews/review_confirm_delete.html'
@@ -94,9 +102,25 @@ class ReviewDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         if self.get_object().reviewer == my_p:
             return True
         return False
+
+#create review
+#this function receive a tutorid in url for automatically populating tutor in a create form
+class ReviewCreateViewWithId(LoginRequiredMixin,CreateView):
+    model = Review
+    template_name = 'reviews/review_form.html'
+    fields = [ 'tuitionSession','description','rating']
     
 
+    #success_url = 'reviews/'
+    def form_valid(self,form):
+        my_p = Profile.objects.get(user_id=self.request.user)
+        tutid = self.kwargs['tutorid']
+        tut_p = Profile.objects.get(id=tutid)
+        form.instance.reviewer = my_p;
+        form.instance.reviewee = tut_p;
+        return super().form_valid(form);  
 
+    
 
 
 
