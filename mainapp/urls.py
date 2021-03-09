@@ -1,16 +1,11 @@
-from django.db import models
-from django.urls import path, include
-from . import views
+from django.urls import path
+from .views import register, LoginFormView, LogoutFormView, error403, refresh_modules
+from .forms import CustomLoginForm
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('', include('listings.urls')),
-	path('', include('chats.urls')),
-	path('', include('users.url')),
-    path('',include('reviews.urls')),
-    path('moderation/', views.moderation, name='moderation-home'),
-    path('moderation/approve/<str:username>/', views.moderation_approve, name='approve'),
-    path('moderation/reject/<str:username>/', views.moderation_reject, name='reject'),
-    path('403/', views.error403, name='error-403'),
-    path('refreshmodules1236172/', views.refresh_modules, name='refresh-modules'), # do not go to this URL unnecessarily
+    path('register/', register, name='register'),
+    path('login/', LoginFormView.as_view(authentication_form=CustomLoginForm), name='login'),
+    path('logout/', LogoutFormView.as_view(), name='logout'),
+    path('403/', error403, name='error-403'),
+    path('refreshmodules1236172/', refresh_modules, name='refresh-modules'), # DO NOT go to this URL unnecessarily
 ]
