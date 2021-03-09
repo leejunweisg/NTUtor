@@ -21,12 +21,12 @@
       <div class="col">
         <div class="card shadow">
           <div class="card-header border-0">
-            <h3 class="mb-0">Search Listings</h3>
+            <h3 class="mb-0">Filter Listings</h3>
           </div>
   
           <div class="card-body">
             <!-- Search form -->
-            <form method="get" action="{% url 'search' %}">
+            <form method="get" action="{% url 'listings' %}">
   
               <!-- Mod code, mod name  -->
               <div class="row">
@@ -101,7 +101,7 @@
   
               <div class="row">
                 <div class="col text-right">
-                  <button type="submit" class="btn btn-lg btn-secondary">Search</button>
+                  <button type="submit" class="btn btn-lg btn-secondary">Filter</button>
                 </div>
               </div>
               
@@ -118,7 +118,7 @@
     <div class="col">
       <div class="card shadow">
         <div class="card-header border-0">
-          <h3 class="mb-0">Search Results</h3>
+          <h3 class="mb-0">Listings</h3>
         </div>
         <div class="table-responsive">
           <table class="table align-items-center table-flush">

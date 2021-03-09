@@ -13,7 +13,7 @@ from reviews.models import Review
 
 # home page 2
 @login_required()
-def search(request):
+def listings(request):
 
     # Get filters
     tuitionFilterQuery = request.GET.get('tuitionFilter')
