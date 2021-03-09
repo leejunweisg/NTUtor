@@ -198,7 +198,7 @@ def getTopRatedTutors():
 
         # avg rating
         avg_rating = Review.objects.filter(reviewee=p).aggregate(Avg('rating'))['rating__avg']
-        temp['avg_rating'] = avg_rating if avg_rating is not None else "N/A"
+        temp['avg_rating'] = avg_rating if avg_rating is not None else -1
         temp['image'] = p.image
         
         results.append(temp)
