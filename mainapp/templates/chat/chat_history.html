@@ -5,10 +5,9 @@
 	{% block content %} 
 
 	{% load static %} 
-       
+	
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link type="text/css" rel="stylesheet" href="{% static 'assets/css/style.css' %}"  media="screen,projection"/>
-	
 	<link type="text/css" rel="stylesheet" href="{% static 'assets/css/materialize.css' %}"  media="screen,projection"/>
 	
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -24,7 +23,7 @@
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
           <div class="col-lg-7 col-md-10">
-            <h1 class="display-2 text-white", width = "100px">Chat History</h1>
+            <h1 class="display-2 text-white">Chat History<h1>
           </div>
         </div>
       </div>
@@ -35,21 +34,31 @@
 			<div class="row">		
 				<div class="col s3">
 					<div class="card">
+					{% if history_list|length == 0%} <!-- if no messages -->
+						<span class="title" style="font-weight: bolder">You have no messages</span>
+					{% else %} <!-- if got messages -->
 						<div class="collection">
-							<!-- to be updated to only show user chat history instead of all users-->
-							{% for user in users %}
-							<a href="{% url 'chat' request.user.id user.id %}" id="user{{ user.id }}" class="collection-item row">
-								<!--add profile picture-->
-								<!--<img src="https://frontend-1.adjust.com/new-assets/images/site-images/interface/user.svg" class="col s4">-->
+							{% for item in history_list %}
+							<a href="{% url 'chat' item|get_digit:'3' item|get_digit:'2' item|get_digit:'1' %}" id="user{{item|get_digit:'2'}}" class="collection-item row">
 								<div class="col s8">
-								<span class="title" style="font-weight: bolder">{{ user.username }}</span>
+								{% for user in users %}
+									{% if item|get_digit:'2' == user.id %}
+										<span class="title" style="font-weight: bolder">{{user.username}}</span></br>
+									{% endif %}
+								{% endfor %}
+								{% for listing in listings %}
+									{% if item|get_digit:'1' == listing.listingID %}
+										<span>Listing Title: {{ listing.title }}</span>
+									{% endif %}
+								{% endfor %}
 								</div>
 							</a>
 							{% endfor %}
 						</div>
+					{% endif %}
 					</div>
 				</div>		
-			<div class="col s9">
+			<!--<div class="col s9">
 				<div class="card">
 					<div id="board" class="section grey lighten-3" style="height: 68vh; padding: 5px; overflow-y: scroll">
 						{% block messages %}
@@ -60,41 +69,21 @@
 						<div class="row">
 							<div class="col s11">
 								<div class="input-field">
-									<input class="form-control form-control-alternative" placeholder="Type your message.." type="text" input id="id_message" width=180%>
-									<!--<input id="id_message" name="message" type="text" placeholder="Type your message..">-->
+									<input class="form-control form-control-alternative" placeholder="Type your message.." type="text" input id="id_message">
 								</div>
 							</div>
-							<div class="col s11" style="line-height: 50px" align='right'>
-								<!--<button class="btn btn-primary"><i class="material-icons">send</i></button>-->
+						<div class="col s11" style="line-height: 50px" align='right'>
 								<button class="btn btn-floating blue waves-effect waves-light"><i class="material-icons">send</i></button>
-							</div>
+							</div> 
 						</div>
 					</form>
 				</div>
-			</div>
+			</div> -->
 			</div>
 		</div>
-	</div>
-
-    <script>
-        // For receiving, set global variables to be used by the 'receive' function
-        sender_id = "{{ receiver.id }}"; //Context variable for receiver
-        receiver_id = "{{ request.user.id }}"; //Context variable for current logged in user
-		//listing_id = "{{ request.listing.id }}";
 		
-        //For sending
-        $(function () {
-            scrolltoend(); // Function to show the latest message, which is at the bottom of the message box, by scrolling to the end
-            //Handling the submit event to send the message.
-            $('#chat-box').on('submit', function (event) {
-                event.preventDefault();
-                var message = $('#id_message');
-				//change listing_id to request.listing.id? not sure. need get listing id dynamically when chat button clicked.
-				//TO BE EDITED WHEN MERGED!!
-                send('2','{{ request.user.username }}', '{{ receiver.username }}', message.val()); //Send function will be defined within 'chat.js'
-                message.val(''); //Clear content of the the input field after sending
-            })
-        })
-    </script>
+		{% include "includes/footer.html" %}	
+	
+	</div>
 	
 	{% endblock content %}
