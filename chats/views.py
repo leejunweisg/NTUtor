@@ -70,13 +70,16 @@ def get_history_list(request, messages, listings):
 	for message in messages:
 		for listing in listings:
 			if listing.listingID == message.listingID.pk:
+
 				if message.receiver_id == request.user.id:
-					value1 = int(str(request.user.id)+ str(message.sender_id) + str(message.listingID.pk)) 
-					h_list.append(value1)
+					value1 = [int(request.user.id) , int(message.sender_id) , int(message.listingID.pk)]
+					if value1 not in h_list:
+						h_list.append(value1)
 				elif message.sender_id == request.user.id:
-					value1 = int(str(request.user.id)+ str(message.receiver_id) + str(message.listingID.pk)) 
-					h_list.append(value1)
-	return list(set(h_list))						
+					value1 = [int(request.user.id), int(message.receiver_id) , int(message.listingID.pk)]
+					if value1 not in h_list:
+						h_list.append(value1)
+	return h_list						
 						
 # View to render template for sending and receiving messages	
 # Takes arguments 'listingID' ,'sender' and 'receiver' to identify the message list to return
