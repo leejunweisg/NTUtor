@@ -5,7 +5,7 @@ from django.http.response import JsonResponse, HttpResponse
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
 from chats.models import Message 
-from listings.models import Listing       
+from listings.models import Listing, TuitionSession       
 from users.models import Profile                                        
 from chats.serializers import MessageSerializer, UserSerializer 
  
@@ -147,6 +147,6 @@ def test_view(request, sender, receiver, listingID):
                 tutorID = sender
         print(tutorID)
         print(tuteeID)
-        #tuitionSession, created = TuitionSession.objects.get_or_create(tutor_id=tutorID, learner_id=tuteeID, listing_id=listingID)
+        tuitionSession, created = TuitionSession.objects.get_or_create(tutor_id=tutorID, learner_id=tuteeID, listing_id=listingID)
         return HttpResponse("<h1>Send Offer</h1>")
         
