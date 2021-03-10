@@ -1,9 +1,7 @@
 //Send function to send message using AJAX
 // We define a variable 'text_box' for storing the html code structure of message that is displayed in the chat box.
-var text_box = '<div class="card-panel right" style="width: 75%; position: relative">'  +
-        '<div style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title">{sender}</div>' + 
-        '{message}' +
-        '</div>';
+
+var text_box = '<div class="row m-2"><div class="card p-2 ml-auto bg-success text-white">{message}<div class="small text-right text-muted">{message.timestamp.time}</div></div></div>';
 
 function scrolltoend() {
     $('#board').stop().animate({
@@ -15,9 +13,12 @@ function send(listing_id, sender, receiver, message) {
     //POST to '/api/messages', the data in JSON string format
     $.post('/api/messages', '{"listingID": "'+ listing_id +'","sender": "'+ sender +'", "receiver": "'+ receiver +'","message": "'+ message +'" }', function (data) {
         console.log(data);
-        var box = text_box.replace('{sender}', "You"); // Replace the text '{sender}' with 'You'
-        box = box.replace('{message}', message); // Replace the text '{message}' with the message that has been sent.
-        $('#board').append(box); // Render the message inside the chat-box by appending it at the end.
+        //var box = text_box.replace('{sender}', "You"); // Replace the text '{sender}' with 'You'
+        var box = text_box.replace('{message}', message); // Replace the text '{message}' with the message that has been sent.
+        var date = Date.now();
+        date = strftime('%e %b, %l:%M %p', date);
+        box = box.replace('{message.timestamp.time}', date)
+        $('#innerboard').append(box); // Render the message inside the chat-box by appending it at the end.
         scrolltoend(); // Scroll to the bottom of he chat-box
     })
 }
