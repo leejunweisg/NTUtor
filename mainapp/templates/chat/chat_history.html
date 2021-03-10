@@ -1,89 +1,94 @@
-	{% extends 'layouts/base.html' %}
+{% extends 'layouts/base.html' %}
+{% load static %} 
+<!-- Title -->
+{% block title %} Chat History {% endblock title %}
 
-	{% block title %}Chat History{% endblock title %}
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="{% static 'assets/css/style.css' %}"  media="screen,projection"/>
+<!--<link type="text/css" rel="stylesheet" href="{% static 'assets/css/materialize.css' %}"  media="screen,projection"/>-->
+{% endblock stylesheets %}
 
-	{% block content %} 
+<!-- Content -->
+{% block content %} 
 
-	{% load static %} 
-	
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link type="text/css" rel="stylesheet" href="{% static 'assets/css/style.css' %}"  media="screen,projection"/>
-	<link type="text/css" rel="stylesheet" href="{% static 'assets/css/materialize.css' %}"  media="screen,projection"/>
-	
-	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="{% static 'assets/js/materialize.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/js/chat.js' %}"></script>
-	
-  <!-- Header -->
-    <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" 
-         style="min-height: 600px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
-      <!-- Mask -->
-      <span class="mask bg-gradient-default opacity-8"></span>
-      <!-- Header container -->
-      <div class="container-fluid d-flex align-items-center">
+<!-- Header -->
+<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
+    style="min-height: 600px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+    <!-- Mask -->
+    <span class="mask bg-gradient-default opacity-8"></span>
+    <!-- Header container -->
+    <div class="container-fluid d-flex align-items-center">
         <div class="row">
-          <div class="col-lg-7 col-md-10">
-            <h1 class="display-2 text-white">Chat History<h1>
-          </div>
+            <div class="col-lg-7 col-md-10">
+                <h1 class="display-2 text-white">Your chats!</h1>
+                <p class="text-white mt-0 mb-5">View all your chats here! View all your chats here! View all your chats here!</p>
+            </div>
         </div>
-      </div>
     </div>
-	
-	<div class="container-fluid mt--7">  
-		<div class="section" style="height: 80vh">  
-			<div class="row">		
-				<div class="col s3">
-					<div class="card">
-					{% if history_list|length == 0%} <!-- if no messages -->
-						<span class="title" style="font-weight: bolder">You have no messages</span>
-					{% else %} <!-- if got messages -->
-						<div class="collection">
-							{% for item in history_list %}
-							<a href="{% url 'chat' request.user.id item|get_digit:'2' item|get_digit:'1' %}" id="user{{item|get_digit:'2'}}" class="collection-item row">
-								<div class="col s8">
-								{% for user in users %}
-									{% if item|get_digit:'2' == user.id %}
-										<span class="title" style="font-weight: bolder">{{user.username}}</span></br>
-									{% endif %}
-								{% endfor %}
-								{% for listing in listings %}
-									{% if item|get_digit:'1' == listing.listingID %}
-										<span>Listing Title: {{ listing.title }}</span>
-									{% endif %}
-								{% endfor %}
-								</div>
-							</a>
-							{% endfor %}
-						</div>
-					{% endif %}
-					</div>
-				</div>		
-			<!--<div class="col s9">
-				<div class="card">
-					<div id="board" class="section grey lighten-3" style="height: 68vh; padding: 5px; overflow-y: scroll">
-						{% block messages %}
-						{% endblock %}
-					</div>
-					<form id="chat-box" class="form-group {% block hide %}hide{% endblock %}" method="post">
-						{% csrf_token %}
-						<div class="row">
-							<div class="col s11">
-								<div class="input-field">
-									<input class="form-control form-control-alternative" placeholder="Type your message.." type="text" input id="id_message">
-								</div>
-							</div>
-						<div class="col s11" style="line-height: 50px" align='right'>
-								<button class="btn btn-floating blue waves-effect waves-light"><i class="material-icons">send</i></button>
-							</div> 
-						</div>
-					</form>
-				</div>
-			</div> -->
+</div>
+
+<div class="container-fluid mt--7">
+
+	<div class="row">
+		<div class="col">
+		  <div class="card shadow">
+			<div class="card-header border-0">
+			  <h3 class="mb-0">Chats</h3>
 			</div>
-		</div>
-		
-		{% include "includes/footer.html" %}	
-	
+			<div class="card-body">
+				<!-- Chat hsitory table -->
+				<div class="table-responsive">
+					<table class="table align-items-center table-flush">
+					  <thead class="thead-light">
+						<tr>
+						  <th scope="col" class="w-25">User</th>
+						  <th scope="col" class="w-70">Listing</th>
+						  <th scope="col" class="w-15">Actions</th>
+						</tr>
+					  </thead>
+					  <tbody>
+						{% if history_list|length == 0%} <!-- if no messages -->
+							<tr>
+								<td colspan="2">You have no chats at this time.</td>
+						  	</tr>
+						{% else %} <!-- if got messages -->
+							{% for item in history_list %}
+							<tr>
+							  {% for user in users %}
+							  	{% if item|get_digit:'2' == user.id %}
+								  <td>{{user.username}}</td>
+								{% endif %}
+							  {% endfor %}
+							  {% for listing in listings %}
+							  {% if item|get_digit:'1' == listing.listingID %}
+								<td>{{ listing.title }}</td>
+							  {% endif %}
+							  {% endfor %}
+							<td><a href="{% url 'chat' request.user.id item|get_digit:'2' item|get_digit:'1' %}" id="user{{item|get_digit:'2'}}" class="btn btn-success">View Chat</a></td>
+							</tr>
+							{% endfor %}
+						{% endif %}
+				
+					  </tbody>
+					</table>
+		  
+				  </div>
+			</div>
+			</div>
+			</div>
 	</div>
+		
 	
-	{% endblock content %}
+	{% include "includes/footer.html" %}	
+
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="{% static 'assets/js/materialize.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/js/chat.js' %}"></script>
+{% endblock javascripts %}
