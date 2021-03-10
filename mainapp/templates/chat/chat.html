@@ -35,11 +35,19 @@
 			<div class="card shadow">
 				<!-- Card header (Listing details) -->
 				<div class="card-header border-0">
+					<a href="{% url 'profile' receiver.username %}">
+					<img src="{{ user.profile.image.url }}" class="rounded-circle" style="height: 5vh"></a>
+					<a href="{% url 'listing-detail' listing.listingID %}">
 					<h3> {{listing.title}}</h3>
 						Module: {{ listing.module }} </br>
-						Posted on: {{listing.datePosted}}</br>
-					<a class="btn btn-info text-white mt-3" href="{% url 'listing-detail' listing.listingID %}"> View Listing </a>
+						Posted on: {{listing.datePosted}}</br></a>
+					<!--<a class="btn btn-info text-white mt-3" href="{% url 'listing-detail' listing.listingID %}"> View Listing </a>-->
+					<!-- popup box-->
+					{% block foo %}
+						{% include "chat/chat_popup.html" %}
+				 	{% endblock %}
 					<hr>
+					
 				</div>
 
 				<!-- Card body (Chat history)-->

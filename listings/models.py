@@ -51,8 +51,12 @@ class TuitionSession(models.Model):
     # When listing deleted, user can still leave review on the tutor, thus dont delete session
     listing = models.ForeignKey(Listing, on_delete=models.SET_NULL, null=True)
 
+    #0 for neutral, 1 for send offer, 2 for accept offer
+    acceptOrder = models.IntegerField(default =0)
     # Once complete
     completed = models.BooleanField(default=False)
+
+    
 
     def __str__(self):
         return f"{self.tuitionSessionID}"
