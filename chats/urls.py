@@ -1,6 +1,7 @@
 # Point to mainapp url
 from django.urls import path
 from . import views
+from chats.views import test_view
 
 urlpatterns = [
 	# Messages: "/api/messages/4/3/1"
@@ -16,4 +17,6 @@ urlpatterns = [
 	path('chat/<int:sender>/<int:receiver>/<int:listingID>', views.message_listing_view, name='chat'),
 	path('chat/<int:sender>/<int:receiver>', views.message_view, name='chat'),
 	
+    #for testing
+    path('test/<int:sender>/<int:receiver>/<int:listingID>',test_view, name='test-detail'),
 ]

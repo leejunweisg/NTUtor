@@ -5,7 +5,8 @@ from django.http.response import JsonResponse, HttpResponse
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
 from chats.models import Message 
-from listings.models import Listing                                                 
+from listings.models import Listing, TuitionSession       
+from users.models import Profile                                        
 from chats.serializers import MessageSerializer, UserSerializer 
  
 
@@ -106,3 +107,48 @@ def message_view(request, sender, receiver):
                        'receiver': User.objects.get(id=receiver), # Receiver context user object for using in template
                        'messages': Message.objects.filter(sender_id=sender, receiver_id=receiver) | 
 								   Message.objects.filter(sender_id=receiver, receiver_id=sender)})
+
+#Send offer test
+def test_view(request, sender, receiver, listingID):
+    #TuitionSessionQuery = request.GET.get('sendOffer')
+
+    if not request.user.is_authenticated:
+        return redirect('index')
+    if request.method == "GET":
+        obj = Listing.objects.get(listingID=listingID)
+        listType = obj.typeOfListing
+        #print(obj)
+        tutor =""
+        tutee =""
+        tutorID = ""
+        tuteeID = ""
+
+        sender_name = Profile.objects.get(user_id=sender)
+        receiver_name = Profile.objects.get(user_id=receiver)
+
+        if listType == "providing": #Listing host is learner
+            tutee = obj.user
+            #compare sender and receiver, whatever is not tutee must be the tutor
+            if tutee != sender_name:
+               #tutor = sender_name
+                tutorID = sender
+                tuteeID = receiver
+            else :
+                #tutor = receiver_name
+                tutorID = receiver
+                tuteeID = sender
+        else : #listing host is teacher
+            tutor = obj.user
+            if tutor != sender_name:
+                #tutee = sender_name
+                tuteeID = sender
+                tutorID = receiver
+            else :
+                #tutee = receiver_name
+                tuteeID = receiver
+                tutorID = sender
+        print(tutorID)
+        print(tuteeID)
+        #tuitionSession, created = TuitionSession.objects.get_or_create(tutor_id=tutorID, learner_id=tuteeID, listing_id=listingID)
+        return HttpResponse("<h1>Send Offer</h1>")
+        
