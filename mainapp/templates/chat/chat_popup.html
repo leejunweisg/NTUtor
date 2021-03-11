@@ -28,7 +28,9 @@
         <div class="modal-footer">
           
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <form method ="POST">
+          <form method ="GET" action="{url 'test-detail'}">
+            {% csrf_token %}
+            {{ modelform.instance.field }}
             <a href = "{url 'test-detail'}" button type="button" class="btn btn-primary" name="action" type="submit" value="submit">Confirm</button>
             </a>
           </form>

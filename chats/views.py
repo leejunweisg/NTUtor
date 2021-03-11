@@ -110,12 +110,14 @@ def message_view(request, sender, receiver):
 
 #Send offer test
 def test_view(request, sender, receiver, listingID):
+    #TuitionSessionQuery = request.GET.get('sendOffer')
+
     if not request.user.is_authenticated:
         return redirect('index')
     if request.method == "GET":
         obj = Listing.objects.get(listingID=listingID)
         listType = obj.typeOfListing
-        print(obj)
+        #print(obj)
         tutor =""
         tutee =""
         tutorID = ""
@@ -147,6 +149,6 @@ def test_view(request, sender, receiver, listingID):
                 tutorID = sender
         print(tutorID)
         print(tuteeID)
-        tuitionSession, created = TuitionSession.objects.get_or_create(tutor_id=tutorID, learner_id=tuteeID, listing_id=listingID)
+        #tuitionSession, created = TuitionSession.objects.get_or_create(tutor_id=tutorID, learner_id=tuteeID, listing_id=listingID)
         return HttpResponse("<h1>Send Offer</h1>")
         
