@@ -16,4 +16,9 @@ urlpatterns = [
 	path('chat/<int:sender>/<int:receiver>/<int:listingID>', views.message_listing_view, name='chat'),
 	path('chat/<int:sender>/<int:receiver>', views.message_view, name='chat'),
 	
+<<<<<<< Updated upstream
+=======
+    #for testing
+    path('chat/<int:sender>/<int:receiver>/<int:listingID>',test_view, name='test-detail'),
+>>>>>>> Stashed changes
 ]
