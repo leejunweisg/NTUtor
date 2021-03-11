@@ -52,9 +52,9 @@ class TuitionSession(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.SET_NULL, null=True)
 
     #Initiated offer
-    initiatedOffer = models.ForeignKey(Profile, on_delete=models.SET_NULL, null = True)
+    #initiatedOffer = models.ForeignKey(Profile, on_delete=models.SET_NULL, null = True)
 
-    # 0 for send offer, 1 for accept offer
+    # 0 for send offer, 1 for accept offer, 2 for finalized
     acceptOffer = models.IntegerField(default=0)
     # Once complete
     completed = models.BooleanField(default=False)

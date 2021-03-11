@@ -114,30 +114,72 @@ def message_listing_view(request, sender, receiver, listingID):
         }
 
         if request.method == "GET":
-            return render(request, "chat/chat.html", context = context) 
+             return render(request, "chat/chat.html", context = context) 
         elif request.method == "POST":
             if request.POST.get("startSession"):
                 # Change context
-                context['offer'] = 1
+                obj = Listing.objects.get(listingID=listingID) #listingID
+                listType = obj.typeOfListing
+                #print(obj)
+                tutor =""
+                tutee =""
+                tutorID = ""
+                tuteeID = ""
 
-                # Create tuition session
+                sender_name = Profile.objects.get(user_id=sender)
+                receiver_name = Profile.objects.get(user_id=receiver)
 
-
-            if request.POST.get("acceptSession"):
-                # Change context
-                context['offer'] = 2
+                if listType == "providing": #Listing host is learner
+                    tutee = obj.user
+                    #compare sender and receiver, whatever is not tutee must be the tutor
+                    if tutee != sender_name:
+                        tutor = sender_name
+                        tutorID = sender
+                        tuteeID = receiver
+                    else :
+                        tutor = receiver_name
+                        tutorID = receiver
+                        tuteeID = sender
+                else : #listing host is teacher
+                    tutor = obj.user
+                    if tutor != sender_name:
+                        tutee = sender_name
+                        tuteeID = sender
+                        tutorID = receiver
+                    else :
+                        tutee = receiver_name
+                        tuteeID = receiver
+                        tutorID = sender
+                print(listingID)
+                print(tutorID)
+                print(tuteeID)
+                #tuitionSession = TuitionSession.objects.all()
+                #print(tuitionSession)
                 
-                # Update database acceptOffer to 1
+                you = User.objects.filter(username=request.user.username)
+                #you1 = Profile.objects.filter(you.username)
+                tuitionSession, created = TuitionSession.objects.get_or_create(tutor=tutor, learner=tutee, listing=obj)
+                return HttpResponse("<h1>Send Offer</h1>")
+                #context['offer'] = 0
+
+        #         # Create tuition session
 
 
-            if request.POST.get("completeSession"):
-                # Change context
-                context['offer'] = 3
+        #     if request.POST.get("acceptSession"):
+        #         # Change context
+        #         context['offer'] = 1
+                
+        #         # Update database acceptOffer to 1
 
-                # Update database completed = True
+
+        #     if request.POST.get("completeSession"):
+        #         # Change context
+        #         context['offer'] = 2
+
+        #         # Update database completed = True
 
                 
-            return render(request, "chat/chat.html", context = context) 
+        #     return render(request, "chat/chat.html", context = context) """
 
 
 
@@ -194,6 +236,6 @@ def test_view(request, sender, receiver, listingID):
                 tutorID = sender
         print(tutorID)
         print(tuteeID)
-        #tuitionSession, created = TuitionSession.objects.get_or_create(tutor_id=tutorID, learner_id=tuteeID, listing_id=listingID)
+        tuitionSession, created = TuitionSession.objects.get_or_create(tutor_id=tutorID, learner_id=tuteeID, listing_id=listingID)
         return HttpResponse("<h1>Send Offer</h1>")
         

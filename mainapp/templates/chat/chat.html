@@ -44,22 +44,7 @@
 					
 					 <form action="{% url 'chat' request.user.id receiver.id listing.listingID %}" method="post">
 						{% csrf_token %}
-						{{ if offer == -1 }}
 							<button class="btn btn-primary"type="submit" name="startSession" id="startSession" value="startSession">Make offer to start tuition session</button>
-						{{ elif offer == 0 }}
-							<button class="btn btn-primary"type="submit" name="acceptSession" id="acceptSession" value="acceptSession">Accept tuition session</button>	
-						{{ elif offer == 1 }}
-							<p> Waiting for other student to accept </p>
-						{{ elif offer == 2 }}
-							<button class="btn btn-primary"type="submit" name="completeSession" id="completeSession" value="completeSession">Complete session</button>
-						{{ elif offer == 3}}
-							<!-- Link to leave review -->
-						
-						{{ endif }}
-
-						
-						
-						
 					 </form>
 					<hr>
 					
