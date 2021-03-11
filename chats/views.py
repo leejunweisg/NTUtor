@@ -88,14 +88,59 @@ def message_listing_view(request, sender, receiver, listingID):
     """Render the template with required context variables"""
     if not request.user.is_authenticated:
         return redirect('index')
-    if request.method == "GET":
-        return render(request, "chat/chat.html",
-                      {'listing_id' : listingID,
-					   'users': User.objects.exclude(username=request.user.username), #List of users
-                       'receiver': User.objects.get(id=receiver), # Receiver context user object for using in template
-                       'messages': Message.objects.filter(listingID=listingID,sender_id=sender, receiver_id=receiver) |
+    else:
+        # Offer has not been given, offer = -1
+        # Waiting to accept offer:
+        # If offer made by other person, offer = 0. 
+        # If offer made by yourself, offer = 1
+        # If offer accepted, offer = 2
+        # Session completed, offer = 3
+
+        # Do methods to get TuitionSession and if it exists, check initatedOffer and acceptOffer
+        # If initiated by ownself, and acceptOffer = 0, means context['offer'] = 1, else context['offer] = 0
+        # if acceptOffer = 1, context['offer'] = 2
+        # if completed = True, context['offer'] = 3
+        # If TuitionSession does not exist, context['offer'] = -1 
+        
+
+        listings = Listing.objects.get(listingID = listingID)
+        context = {
+            'listing_id' : listingID,
+		    'users': User.objects.exclude(username=request.user.username), #List of users
+            'receiver': User.objects.get(id=receiver), # Receiver context user object for using in template
+            'messages': Message.objects.filter(listingID=listingID,sender_id=sender, receiver_id=receiver) |
                                    Message.objects.filter(listingID=listingID,sender_id=receiver, receiver_id=sender), # Return context with message objects where users are either sender or receiver.
-						'listing': Listing.objects.get(listingID = listingID)}) 
+			'listing': listings
+        }
+
+        if request.method == "GET":
+            return render(request, "chat/chat.html", context = context) 
+        elif request.method == "POST":
+            if request.POST.get("startSession"):
+                # Change context
+                context['offer'] = 1
+
+                # Create tuition session
+
+
+            if request.POST.get("acceptSession"):
+                # Change context
+                context['offer'] = 2
+                
+                # Update database acceptOffer to 1
+
+
+            if request.POST.get("completeSession"):
+                # Change context
+                context['offer'] = 3
+
+                # Update database completed = True
+
+                
+            return render(request, "chat/chat.html", context = context) 
+
+
+
 	
 def message_view(request, sender, receiver): 
     """Render the template with required context variables"""
