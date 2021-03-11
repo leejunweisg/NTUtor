@@ -3,9 +3,13 @@
 {% block popup %}
 <!-- Button trigger modal -->
 <!-- add if statement to show which text Make Offer, Accept Offer-->
-<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">
-    Make Offer
-  </button>
+{% if offer == 0 %}
+<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Make Offer</button>
+{% elif offer == 1 %}
+<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Accept Offer</button>
+{% elif offer == 2 %}
+<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Done Offer</button>
+{% endif %}
   
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -22,18 +26,29 @@
         <div class="modal-body">
             <div class="py-3 text-center">
                 <i class="ni ni-bell-55 ni-3x"></i>
-                <h4 class="heading mt-4">Send Your Offer?</h4>
+                <h4 class="heading mt-4">
+                {% if offer == 0 %}
+                Send Your Offer? 
+                {% elif offer == 1 %}    
+                Accept Your Offer?
+                {% endif %}
+                </h4>
             </div>
         </div>
         <div class="modal-footer">
-          
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <form method ="GET" action="{url 'test-detail'}">
-            {% csrf_token %}
-            {{ modelform.instance.field }}
-            <a href = "{url 'test-detail'}" button type="button" class="btn btn-primary" name="action" type="submit" value="submit">Confirm</button>
-            </a>
-          </form>
+            <form action="{% url 'chat' request.user.id receiver.id listing.listingID %}" method="post">
+              {% csrf_token %}
+              {% if offer == 0 %}
+              <button class="btn btn-primary"type="submit" name="startSession" id="startSession" value="startSession">Confirm</button>
+              {% elif offer == 1 %}
+              <button class="btn btn-primary"type="submit" name="acceptSession" id="acceptSession" value="acceptSession">Confirm</button>	
+              {% elif offer == 2 %}
+              <button class="btn btn-primary"type="submit" name="completeSession" id="completeSession" value="completeSession">Confirm</button>
+              <!-- Link to leave review -->
+              {% endif %}
+
+            </form>
         </div>
       </div>
     </div>

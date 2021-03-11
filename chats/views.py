@@ -101,85 +101,84 @@ def message_listing_view(request, sender, receiver, listingID):
         # if acceptOffer = 1, context['offer'] = 2
         # if completed = True, context['offer'] = 3
         # If TuitionSession does not exist, context['offer'] = -1 
-        
+
+        # identify tutor and tutee
+        obj = Listing.objects.get(listingID=listingID) #listingID
+        listType = obj.typeOfListing
+        #print(obj)
+        tutor =""
+        tutee =""
+        tutorID = ""
+        tuteeID = ""
+
+        sender_name = Profile.objects.get(user_id=sender)
+        receiver_name = Profile.objects.get(user_id=receiver)
+
+        if listType == "providing": #Listing host is learner
+            #print(obj.user)
+            tutee = obj.user
+            #compare sender and receiver, whatever is not tutee must be the tutor
+            if tutee != sender_name:
+                tutor = sender_name
+                tutorID = sender
+                tuteeID = receiver
+            else :
+                tutor = receiver_name
+                tutorID = receiver
+                tuteeID = sender
+        else : #listing host is teacher
+            tutor = obj.user
+            if tutor != sender_name:
+                tutee = sender_name
+                tuteeID = sender        
+                tutorID = receiver
+            else :
+                tutee = receiver_name
+                tuteeID = receiver
+                tutorID = sender
+        #print(obj)
+        #print(tutorID)
+        #print(tuteeID)
+
+        tuitionSession, created = TuitionSession.objects.get_or_create(tutor=tutor, learner=tutee, listing=obj)
+        #TuitionSession.objects.get(tutor=tutor, learner=tutee, listing=obj).offer
+        print(tuitionSession.offer)
 
         listings = Listing.objects.get(listingID = listingID)
+        
         context = {
             'listing_id' : listingID,
 		    'users': User.objects.exclude(username=request.user.username), #List of users
             'receiver': User.objects.get(id=receiver), # Receiver context user object for using in template
             'messages': Message.objects.filter(listingID=listingID,sender_id=sender, receiver_id=receiver) |
                                    Message.objects.filter(listingID=listingID,sender_id=receiver, receiver_id=sender), # Return context with message objects where users are either sender or receiver.
-			'listing': listings
+			'listing': listings,
+            'offer': tuitionSession.offer
         }
 
         if request.method == "GET":
              return render(request, "chat/chat.html", context = context) 
+
         elif request.method == "POST":
             if request.POST.get("startSession"):
-                # Change context
-                obj = Listing.objects.get(listingID=listingID) #listingID
-                listType = obj.typeOfListing
-                #print(obj)
-                tutor =""
-                tutee =""
-                tutorID = ""
-                tuteeID = ""
-
-                sender_name = Profile.objects.get(user_id=sender)
-                receiver_name = Profile.objects.get(user_id=receiver)
-
-                if listType == "providing": #Listing host is learner
-                    tutee = obj.user
-                    #compare sender and receiver, whatever is not tutee must be the tutor
-                    if tutee != sender_name:
-                        tutor = sender_name
-                        tutorID = sender
-                        tuteeID = receiver
-                    else :
-                        tutor = receiver_name
-                        tutorID = receiver
-                        tuteeID = sender
-                else : #listing host is teacher
-                    tutor = obj.user
-                    if tutor != sender_name:
-                        tutee = sender_name
-                        tuteeID = sender
-                        tutorID = receiver
-                    else :
-                        tutee = receiver_name
-                        tuteeID = receiver
-                        tutorID = sender
-                print(listingID)
-                print(tutorID)
-                print(tuteeID)
-                #tuitionSession = TuitionSession.objects.all()
-                #print(tuitionSession)
-                
-                you = User.objects.filter(username=request.user.username)
-                #you1 = Profile.objects.filter(you.username)
-                tuitionSession, created = TuitionSession.objects.get_or_create(tutor=tutor, learner=tutee, listing=obj)
-                return HttpResponse("<h1>Send Offer</h1>")
-                #context['offer'] = 0
-
-        #         # Create tuition session
-
-
-        #     if request.POST.get("acceptSession"):
-        #         # Change context
-        #         context['offer'] = 1
-                
-        #         # Update database acceptOffer to 1
-
-
-        #     if request.POST.get("completeSession"):
-        #         # Change context
-        #         context['offer'] = 2
-
-        #         # Update database completed = True
+                #tuitionSession = TuitionSession.objects.get(tutor=tutor, learner=tutee, listing=obj) #already have a session
+                #print(tuitionSession.offer)
+                tuitionSession.offer = 1 
+                tuitionSession.save()
+                context['offer'] = 1
+                #elif tuitionSession.offer == 1: # finalize order
+                #    tuitionSession.offer == 2 
+                return render(request, "chat/chat.html", context=context)
 
                 
-        #     return render(request, "chat/chat.html", context = context) """
+            if request.POST.get("acceptSession"):
+                print("hello")
+                return render(request, "chat/chat.html", context=context)
+
+
+            if request.POST.get("completeSession"):
+                print("hello")
+                return render(request, "chat/chat.html", context=context)
 
 
 

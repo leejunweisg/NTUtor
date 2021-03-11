@@ -41,11 +41,10 @@
 					<h3> {{listing.title}}</h3>
 						Module: {{ listing.module }} </br>
 						Posted on: {{listing.datePosted}}</br></a>
-					
-					 <form action="{% url 'chat' request.user.id receiver.id listing.listingID %}" method="post">
-						{% csrf_token %}
-							<button class="btn btn-primary"type="submit" name="startSession" id="startSession" value="startSession">Make offer to start tuition session</button>
-					 </form>
+					<!-- popup box-->
+					{% block foo %}
+						{% include "chat/chat_popup.html" %}
+				 	{% endblock %}
 					<hr>
 					
 				</div>

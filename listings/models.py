@@ -54,8 +54,8 @@ class TuitionSession(models.Model):
     #Initiated offer
     #initiatedOffer = models.ForeignKey(Profile, on_delete=models.SET_NULL, null = True)
 
-    # 0 for send offer, 1 for accept offer, 2 for finalized
-    acceptOffer = models.IntegerField(default=0)
+    # 1 for send offer, 2 for accept offer, 3 for finalized offer, 0 is default 
+    offer = models.IntegerField(default=0)
     # Once complete
     completed = models.BooleanField(default=False)
 
