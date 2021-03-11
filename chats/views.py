@@ -239,3 +239,17 @@ def test_view(request, sender, receiver, listingID):
         tuitionSession, created = TuitionSession.objects.get_or_create(tutor_id=tutorID, learner_id=tuteeID, listing_id=listingID)
         return HttpResponse("<h1>Send Offer</h1>")
         
+
+        # {% csrf_token %}
+		# 				{{ if offer == 0}}
+		# 					<button class="btn btn-primary"type="submit" name="startSession" id="startSession" value="startSession">Make offer to start tuition session</button>
+		# 				{{ elif offer == 1 }}
+		# 					<button class="btn btn-primary"type="submit" name="acceptSession" id="acceptSession" value="acceptSession">Accept tuition session</button>	
+		# 				{{ elif offer == 2 }}
+		# 					<p> Waiting for other student to accept </p>
+		# 				{{ elif offer == 3 }}
+		# 					<button class="btn btn-primary"type="submit" name="completeSession" id="completeSession" value="completeSession">Complete session</button>
+		# 				{{ elif offer == 4}}
+		# 					<!-- Link to leave review -->
+						
+		# 				{{ endif }}
