@@ -3,14 +3,16 @@
 {% block popup %}
 <!-- Button trigger modal -->
 <!-- add if statement to show which text Make Offer, Accept Offer-->
-{% if offer == 0 %}
-<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Make Offer</button>
-{% elif offer == 1 %}
-<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Accept Offer</button>
-{% elif offer == 2 %}
-<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Done Offer</button>
+{% if tuitionSession.offer == 0 and listing.user != user%}
+<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Request Session</button>
+{% elif tuitionSession.offer == 1 and listing.user == user%}
+<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Accept Session</button>
+{% elif tuitionSession.offer == 2 and listing.user == user%}
+<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Complete Session</button>
+{% elif tuitionSession.offer == 3 %}
+<a href="{% url 'review-create' request.user.id listing.listingID %}" button type="button" class="btn btn-primary mt-3">Leave Review</a>
 {% endif %}
-  
+
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -27,27 +29,28 @@
             <div class="py-3 text-center">
                 <i class="ni ni-bell-55 ni-3x"></i>
                 <h4 class="heading mt-4">
-                {% if offer == 0 %}
-                Send Your Offer? 
-                {% elif offer == 1 %}    
-                Accept Your Offer?
+                {% if tuitionSession.offer == 0 and listing.user != user %}
+                Request Session? 
+                {% elif tuitionSession.offer == 1 and listing.user == user %}    
+                Confirm Session?
+                {% elif tuitionSession.offer == 2 and listing.user == user %}    
+                Complete Your Session?
                 {% endif %}
                 </h4>
             </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            
             <form action="{% url 'chat' request.user.id receiver.id listing.listingID %}" method="post">
               {% csrf_token %}
-              {% if offer == 0 %}
-              <button class="btn btn-primary"type="submit" name="startSession" id="startSession" value="startSession">Confirm</button>
-              {% elif offer == 1 %}
-              <button class="btn btn-primary"type="submit" name="acceptSession" id="acceptSession" value="acceptSession">Confirm</button>	
-              {% elif offer == 2 %}
-              <button class="btn btn-primary"type="submit" name="completeSession" id="completeSession" value="completeSession">Confirm</button>
-              <!-- Link to leave review -->
+              {% if tuitionSession.offer == 0 and listing.user != user %}
+              <button class="btn btn-primary" type="submit" onclick="tuitionMsg('Request Sent')" name="startSession" id="startSession" value="startSession">Confirm</button>
+              {% elif tuitionSession.offer == 1 and listing.user == user %}
+              <button class="btn btn-primary"type="submit" onclick="tuitionMsg('Accept Sent')" name="acceptSession" id="acceptSession" value="acceptSession">Confirm</button>	
+              {% elif tuitionSession.offer == 2 and listing.user == user %}
+              <button class="btn btn-primary"type="submit" onclick="tuitionMsg('Complete Session')" name="completeSession" id="completeSession" value="completeSession">Confirm</button>
               {% endif %}
-
             </form>
         </div>
       </div>

@@ -44,9 +44,7 @@
 					<!-- popup box-->
 					{% block foo %}
 						{% include "chat/chat_popup.html" %}
-				 	{% endblock %}
-					<hr>
-					
+				 	{% endblock %}					
 				</div>
 
 				<!-- Card body (Chat history)-->
@@ -91,7 +89,6 @@
 						</div>
 					</form>
 				</div>
-
 			</div>
 		</div>
 		
@@ -122,6 +119,13 @@
 			message.val(''); //Clear content of the the input field after sending
 		})
 	})
+	//For sending tuition messages
+	function tuitionMsg(message) {
+		scrolltoend();
+		send('{{ listing_id}}','{{ request.user.username }}', '{{ receiver.username }}', message); //Send function will be defined within 'chat.js'
+		message.val(''); //Clear content of the the input field after sending
+		location.href="chat/chat.html";
+	}
 </script>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

@@ -89,19 +89,6 @@ def message_listing_view(request, sender, receiver, listingID):
     if not request.user.is_authenticated:
         return redirect('index')
     else:
-        # Offer has not been given, offer = -1
-        # Waiting to accept offer:
-        # If offer made by other person, offer = 0. 
-        # If offer made by yourself, offer = 1
-        # If offer accepted, offer = 2
-        # Session completed, offer = 3
-
-        # Do methods to get TuitionSession and if it exists, check initatedOffer and acceptOffer
-        # If initiated by ownself, and acceptOffer = 0, means context['offer'] = 1, else context['offer] = 0
-        # if acceptOffer = 1, context['offer'] = 2
-        # if completed = True, context['offer'] = 3
-        # If TuitionSession does not exist, context['offer'] = -1 
-
         # identify tutor and tutee
         obj = Listing.objects.get(listingID=listingID) #listingID
         listType = obj.typeOfListing
@@ -113,6 +100,7 @@ def message_listing_view(request, sender, receiver, listingID):
 
         sender_name = Profile.objects.get(user_id=sender)
         receiver_name = Profile.objects.get(user_id=receiver)
+        print(sender_name)
 
         if listType == "providing": #Listing host is learner
             #print(obj.user)
@@ -142,7 +130,7 @@ def message_listing_view(request, sender, receiver, listingID):
 
         tuitionSession, created = TuitionSession.objects.get_or_create(tutor=tutor, learner=tutee, listing=obj)
         #TuitionSession.objects.get(tutor=tutor, learner=tutee, listing=obj).offer
-        print(tuitionSession.offer)
+        #print(tuitionSession.offer)
 
         listings = Listing.objects.get(listingID = listingID)
         
@@ -153,32 +141,35 @@ def message_listing_view(request, sender, receiver, listingID):
             'messages': Message.objects.filter(listingID=listingID,sender_id=sender, receiver_id=receiver) |
                                    Message.objects.filter(listingID=listingID,sender_id=receiver, receiver_id=sender), # Return context with message objects where users are either sender or receiver.
 			'listing': listings,
-            'offer': tuitionSession.offer
+            'tuitionSession': tuitionSession,
+            'user' : Profile.objects.get(user=request.user.id),
+            'tutorID': tutorID,
         }
 
         if request.method == "GET":
              return render(request, "chat/chat.html", context = context) 
-
         elif request.method == "POST":
             if request.POST.get("startSession"):
-                #tuitionSession = TuitionSession.objects.get(tutor=tutor, learner=tutee, listing=obj) #already have a session
-                #print(tuitionSession.offer)
                 tuitionSession.offer = 1 
                 tuitionSession.save()
-                context['offer'] = 1
-                #elif tuitionSession.offer == 1: # finalize order
-                #    tuitionSession.offer == 2 
-                return render(request, "chat/chat.html", context=context)
-
-                
+                context['tuitionSession'] = 1
+                return render(request, "chat/chat.html", context=context)        
             if request.POST.get("acceptSession"):
-                print("hello")
+                tuitionSession.offer = 2 
+                tuitionSession.save()
+                context['tuitionSession'] = 2
                 return render(request, "chat/chat.html", context=context)
-
-
             if request.POST.get("completeSession"):
-                print("hello")
+                tuitionSession.offer = 3 
+                tuitionSession.save()
+                context['tuitionSession'] = 3
                 return render(request, "chat/chat.html", context=context)
+            # if request.POST.get("reviewSession"):
+            #     tuitionSession.offer = 4 
+            #     tuitionSession.save()
+            #     context['tuitionSession'] = 4
+            #     tuitionSession.completed = True
+            #     return render(request, "chat/chat.html", context=context)
 
 
 
@@ -193,62 +184,3 @@ def message_view(request, sender, receiver):
                        'receiver': User.objects.get(id=receiver), # Receiver context user object for using in template
                        'messages': Message.objects.filter(sender_id=sender, receiver_id=receiver) | 
 								   Message.objects.filter(sender_id=receiver, receiver_id=sender)})
-
-#Send offer test
-def test_view(request, sender, receiver, listingID):
-    #TuitionSessionQuery = request.GET.get('sendOffer')
-
-    if not request.user.is_authenticated:
-        return redirect('index')
-    if request.method == "GET":
-        obj = Listing.objects.get(listingID=listingID)
-        listType = obj.typeOfListing
-        #print(obj)
-        tutor =""
-        tutee =""
-        tutorID = ""
-        tuteeID = ""
-
-        sender_name = Profile.objects.get(user_id=sender)
-        receiver_name = Profile.objects.get(user_id=receiver)
-
-        if listType == "providing": #Listing host is learner
-            tutee = obj.user
-            #compare sender and receiver, whatever is not tutee must be the tutor
-            if tutee != sender_name:
-               #tutor = sender_name
-                tutorID = sender
-                tuteeID = receiver
-            else :
-                #tutor = receiver_name
-                tutorID = receiver
-                tuteeID = sender
-        else : #listing host is teacher
-            tutor = obj.user
-            if tutor != sender_name:
-                #tutee = sender_name
-                tuteeID = sender
-                tutorID = receiver
-            else :
-                #tutee = receiver_name
-                tuteeID = receiver
-                tutorID = sender
-        print(tutorID)
-        print(tuteeID)
-        tuitionSession, created = TuitionSession.objects.get_or_create(tutor_id=tutorID, learner_id=tuteeID, listing_id=listingID)
-        return HttpResponse("<h1>Send Offer</h1>")
-        
-
-        # {% csrf_token %}
-		# 				{{ if offer == 0}}
-		# 					<button class="btn btn-primary"type="submit" name="startSession" id="startSession" value="startSession">Make offer to start tuition session</button>
-		# 				{{ elif offer == 1 }}
-		# 					<button class="btn btn-primary"type="submit" name="acceptSession" id="acceptSession" value="acceptSession">Accept tuition session</button>	
-		# 				{{ elif offer == 2 }}
-		# 					<p> Waiting for other student to accept </p>
-		# 				{{ elif offer == 3 }}
-		# 					<button class="btn btn-primary"type="submit" name="completeSession" id="completeSession" value="completeSession">Complete session</button>
-		# 				{{ elif offer == 4}}
-		# 					<!-- Link to leave review -->
-						
-		# 				{{ endif }}
