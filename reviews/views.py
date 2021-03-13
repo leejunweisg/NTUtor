@@ -6,8 +6,10 @@ from listings.utility import fetch_modules, populate_modules
 
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.views.generic import (ListView, CreateView,UpdateView,DeleteView)
-from .models import Review
+from .models import Review, TuitionSession
 from users.models import Profile
+
+
 
 
 
@@ -64,6 +66,7 @@ class ReviewCreateView(LoginRequiredMixin,CreateView):
             my_p = Profile.objects.get(user_id=self.request.user)
             form.instance.reviewer = my_p;
             return super().form_valid(form);
+    
 #https://stackoverflow.com/questions/35567667/cannot-assign-simplelazyobject-user-xxx-comment-user-must-be-a-mypro
 #for getting instance of user profile     
 
@@ -105,7 +108,7 @@ class ReviewDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
 
 #create review
 #this function receive a tutorid in url for automatically populating tutor in a create form
-class ReviewCreateViewWithId(LoginRequiredMixin,CreateView):
+class ReviewCreateViewWithId(LoginRequiredMixin,UserPassesTestMixin,CreateView):
     model = Review
     template_name = 'reviews/review_form.html'
     fields = [ 'tuitionSession','description','rating']
@@ -116,9 +119,20 @@ class ReviewCreateViewWithId(LoginRequiredMixin,CreateView):
         my_p = Profile.objects.get(user_id=self.request.user)
         tutid = self.kwargs['tutorid']
         tut_p = Profile.objects.get(id=tutid)
-        form.instance.reviewer = my_p;
-        form.instance.reviewee = tut_p;
+        form.instance.reviewer = my_p
+        form.instance.reviewee = tut_p
         return super().form_valid(form);  
+    def test_func(self):
+        my_p = Profile.objects.get(user_id=self.request.user)
+        tutid = self.kwargs['tutorid']
+        tut_p = Profile.objects.get(id=tutid)
+        availableReviews = 0
+        availableReviews = TuitionSession.objects.filter(tutor=tut_p, completed=True,learner=my_p).count()
+        if availableReviews>=1:
+            return True
+        else: 
+            return False
+        
 
     
 

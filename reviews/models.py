@@ -11,7 +11,7 @@ class Review(models.Model):
     reviewID = models.AutoField(primary_key=True)
 
     # Set the tuition session to null, but leave review there
-    tuitionSession = models.ForeignKey(TuitionSession, on_delete = models.SET_NULL, null=True)
+    tuitionSession = models.ForeignKey(TuitionSession,related_name="tuitionSession", on_delete = models.SET_NULL, null=True)
     #date_posted = models.DateTimeField(default=timezone.now)
     reviewee = models.ForeignKey(Profile, on_delete=models.SET_NULL, related_name="reviewee", null=True)
     reviewer = models.ForeignKey(Profile, on_delete=models.SET_NULL, related_name="reviewer", null=True)
