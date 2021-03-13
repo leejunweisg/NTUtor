@@ -139,10 +139,3 @@ class ReviewCreateViewWithId(LoginRequiredMixin,UserPassesTestMixin,CreateView):
             return True
         else: 
             return False
-        
-
-    
-
-
-
-
