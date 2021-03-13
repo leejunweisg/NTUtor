@@ -75,9 +75,13 @@ class ReviewCreateView(LoginRequiredMixin,CreateView):
 class ReviewUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Review
     template_name = 'reviews/review_form.html'
-    fields = [ 'tuitionSession','description','rating']
+    fields = [ 'description','rating']
    
     def form_valid(self,form):
+        oldReview = Review.objects.get(reviewID=self.kwargs['pk'])
+        session = oldReview.tuitionSession
+        form.instance.TuitionSession = session
+
         my_p = Profile.objects.get(user_id=self.request.user)
         tutid = self.kwargs['tutorid']
         tut_p = Profile.objects.get(id=tutid)
@@ -111,7 +115,7 @@ class ReviewDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
 class ReviewCreateViewWithId(LoginRequiredMixin,UserPassesTestMixin,CreateView):
     model = Review
     template_name = 'reviews/review_form.html'
-    fields = [ 'tuitionSession','description','rating']
+    fields = [ 'description','rating']
     
 
     #success_url = 'reviews/'
@@ -119,15 +123,18 @@ class ReviewCreateViewWithId(LoginRequiredMixin,UserPassesTestMixin,CreateView):
         my_p = Profile.objects.get(user_id=self.request.user)
         tutid = self.kwargs['tutorid']
         tut_p = Profile.objects.get(id=tutid)
+        sessionid = self.kwargs['sessionid']
+        form.instance.tuitionSession = TuitionSession.objects.get(tutor=tut_p,tuitionSessionID=sessionid, completed=True,learner=my_p)
         form.instance.reviewer = my_p
         form.instance.reviewee = tut_p
         return super().form_valid(form);  
     def test_func(self):
         my_p = Profile.objects.get(user_id=self.request.user)
         tutid = self.kwargs['tutorid']
+        sessionid = self.kwargs['sessionid']
         tut_p = Profile.objects.get(id=tutid)
         availableReviews = 0
-        availableReviews = TuitionSession.objects.filter(tutor=tut_p, completed=True,learner=my_p).count()
+        availableReviews = TuitionSession.objects.filter(tutor=tut_p,tuitionSessionID=sessionid, completed=True,learner=my_p).count()
         if availableReviews>=1:
             return True
         else: 
