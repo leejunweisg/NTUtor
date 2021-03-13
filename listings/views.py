@@ -189,6 +189,7 @@ def getTopRatedTutors():
         temp['username'] = p.user.username
         temp['name'] = p.name
         temp['verified'] = p.verified
+        temp['image'] = p.image
 
         # number of tuition sessions given
         temp['n_sessions'] = TuitionSession.objects.filter(tutor=p, completed=True).count()
