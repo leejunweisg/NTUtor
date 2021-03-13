@@ -10,7 +10,7 @@
 {% elif tuitionSession.offer == 2 and listing.user == user%}
 <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Complete Session</button>
 {% elif tuitionSession.offer == 3 %}
-<a href="{% url 'review-create' receiverID listing.listingID %}" button type="button" class="btn btn-primary mt-3">Leave a Review</a>
+<a href="{% url 'review-create-id' receiverID listing.listingID %}" button type="button" class="btn btn-primary mt-3">Leave a Review</a>
 {% endif %}
 
   <!-- Modal -->
