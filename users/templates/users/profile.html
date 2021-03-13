@@ -36,7 +36,7 @@
             <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
               <div class="d-flex justify-content-between">
                 
-                <a href="#" class="btn btn-sm btn-info float-left">Reviews</a>
+                <a href="{% url 'reviews-username' profile_details.id %}" class="btn btn-sm btn-info float-left">Reviews</a>
                 {% if request.user.username == profile_details.username %}
                 <a href="{% url 'edit-profile' %}" class="btn btn-sm btn-default float-right">Edit Profile</a>
                 {% endif %}

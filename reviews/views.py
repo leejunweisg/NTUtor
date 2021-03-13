@@ -127,7 +127,8 @@ class ReviewCreateViewWithId(LoginRequiredMixin,UserPassesTestMixin,CreateView):
         form.instance.tuitionSession = TuitionSession.objects.get(tutor=tut_p,tuitionSessionID=sessionid, completed=True,learner=my_p)
         form.instance.reviewer = my_p
         form.instance.reviewee = tut_p
-        return super().form_valid(form);  
+        return super().form_valid(form); 
+         
     def test_func(self):
         my_p = Profile.objects.get(user_id=self.request.user)
         tutid = self.kwargs['tutorid']
