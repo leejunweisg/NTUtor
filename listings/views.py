@@ -223,20 +223,11 @@ def getStudentDetails(username):
         studentDetailsList['description'] = p.description
         studentDetailsList['image'] = p.image
         studentDetailsList['verified'] = p.verified
-
-        # Get avg ratings for student as a tutor
-        sessionsTutor = TuitionSession.objects.filter(tutor = p, completed = True).count()
-        reviewsTutor = Review.objects.filter(reviewee = p).count()
-        avgRatingTutor = Review.objects.filter(reviewee = p).aggregate(Avg('rating'))['rating__avg']
-        avgRatingTutor = avgRatingTutor if avgRatingTutor is not None else 'N/A'
-        studentDetailsList['avgRatingTutor'] = avgRatingTutor
     
-        # Get avg ratings for student as a tutee
-        sessionTutee = TuitionSession.objects.filter(learner = p, completed = True).count()
-        reviewsTutee = Review.objects.filter(reviewee = p).count()
-        avgRatingTutee = Review.objects.filter(reviewee = p).aggregate(Avg('rating'))['rating__avg']
-        avgRatingTutee = avgRatingTutee if avgRatingTutee is not None else 'N/A'
-        studentDetailsList['avgRatingTutee'] = avgRatingTutee
+        # Get avg ratings for student 
+        avgRating = Review.objects.filter(reviewee = p).aggregate(Avg('rating'))['rating__avg']
+        avgRating = avgRating if avgRating is not None else 'N/A'
+        studentDetailsList['avgRating'] = avgRating
 
         # Get total listings
         studentDetailsList['totalListings'] = Listing.objects.filter(user = p).count()
