@@ -100,7 +100,7 @@ def message_listing_view(request, sender, receiver, listingID):
 
         sender_name = Profile.objects.get(user_id=sender)
         receiver_name = Profile.objects.get(user_id=receiver)
-        print(sender_name)
+        print(receiver_name)
 
         if listType == "providing": #Listing host is learner
             #print(obj.user)
@@ -144,6 +144,7 @@ def message_listing_view(request, sender, receiver, listingID):
             'tuitionSession': tuitionSession,
             'user' : Profile.objects.get(user=request.user.id),
             'tutorID': tutorID,
+            'receiverID' : receiver,
         }
 
         if request.method == "GET":
@@ -154,22 +155,22 @@ def message_listing_view(request, sender, receiver, listingID):
                 tuitionSession.save()
                 context['tuitionSession'] = 1
                 return render(request, "chat/chat.html", context=context)        
-            if request.POST.get("acceptSession"):
+            elif request.POST.get("acceptSession"):
                 tuitionSession.offer = 2 
                 tuitionSession.save()
                 context['tuitionSession'] = 2
                 return render(request, "chat/chat.html", context=context)
-            if request.POST.get("completeSession"):
+            elif request.POST.get("completeSession"):
                 tuitionSession.offer = 3 
                 tuitionSession.save()
                 context['tuitionSession'] = 3
+                tuitionSession.completed = True
                 return render(request, "chat/chat.html", context=context)
-            # if request.POST.get("reviewSession"):
+            #if request.POST.get("reviewSession"):
             #     tuitionSession.offer = 4 
             #     tuitionSession.save()
             #     context['tuitionSession'] = 4
-            #     tuitionSession.completed = True
-            #     return render(request, "chat/chat.html", context=context)
+            #    return render(request, "chat/chat.html", context=context)
 
 
 
