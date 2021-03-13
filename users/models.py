@@ -6,6 +6,7 @@ from PIL import Image
 
 # one user mapped to one profile
 class Profile(models.Model):
+   
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=300, null=True)
     verified = models.IntegerField(default=0)
