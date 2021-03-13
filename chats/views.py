@@ -105,6 +105,7 @@ def message_listing_view(request, sender, receiver, listingID):
         if listType == "providing": #Listing host is learner
             #print(obj.user)
             tutee = obj.user
+            listHost = tutee.id
             #compare sender and receiver, whatever is not tutee must be the tutor
             if tutee != sender_name:
                 tutor = sender_name
@@ -116,6 +117,7 @@ def message_listing_view(request, sender, receiver, listingID):
                 tuteeID = sender
         else : #listing host is teacher
             tutor = obj.user
+            listHost = tutor.id
             if tutor != sender_name:
                 tutee = sender_name
                 tuteeID = sender        
@@ -145,6 +147,7 @@ def message_listing_view(request, sender, receiver, listingID):
             'user' : Profile.objects.get(user=request.user.id),
             'tutorID': tutorID,
             'receiverID' : receiver,
+            'hostID': listHost,
         }
 
         if request.method == "GET":
