@@ -26,9 +26,10 @@
                     </fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-info" type="submit">Submit</button>
-                        {% if object.pk != null %}
-                        <a class="btn btn-danger" href="{% url 'review-delete' object.pk %}">Delete</a>
+                        {% if review.pk != null %}
+                        <a class="btn btn-danger" href="{% url 'review-delete' pk=review.pk  tutorid=tutorid %}">Delete</a>
                         {% endif %}
+                        
                     </div>
                 </form>
             </div>

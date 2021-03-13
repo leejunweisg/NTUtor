@@ -14,7 +14,8 @@
           {% include "includes/messages.html" %}
           <h1 class="text-white">{{tutorName}}'s' Reviews</h1>
           <div class="mb-2">
-            <a class="btn btn-secondary" href="{% url 'review-create' %}" >+ Add a review</a>
+            
+            
           </div>
           <div class="header-body">
             
@@ -38,7 +39,7 @@
                           {% if review.reviewer == studentProfile %}
                         
                           <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                            <a href="{% url 'review-update' review.reviewID %}"><i class="fas fa-edit" style="color:#fff;" ></i></a>
+                            <a href="{% url 'review-update' tutorid=tutorid pk=review.reviewID %}"><i class="fas fa-edit" style="color:#fff;" ></i></a>
                             
                           </div>
                          
