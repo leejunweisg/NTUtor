@@ -116,8 +116,7 @@ class ReviewCreateViewWithId(LoginRequiredMixin,UserPassesTestMixin,CreateView):
     model = Review
     template_name = 'reviews/review_form.html'
     fields = [ 'description','rating']
-    
-
+   
     #success_url = 'reviews/'
     def form_valid(self,form):
         my_p = Profile.objects.get(user_id=self.request.user)
