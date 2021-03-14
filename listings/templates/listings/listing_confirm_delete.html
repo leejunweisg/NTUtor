@@ -26,7 +26,7 @@
             <div class="card-header bg-white border-0">
               <div class="row align-items-center">
                 <div class="col-12">
-                  <h3 class="mb-0">Delete tuition listing</h3>
+                  <h3 class="mb-0">Delete Listing</h3>
                 </div>
               </div>
             </div>
@@ -34,8 +34,9 @@
               <form method = "POST">
                 {% csrf_token %}
                 <fieldset class="form-group">
-                  <h2>Are you sure you want to delete the tuition listing?</h2>
-                  <h2>Title: {{ object.title }}</h2>
+                  <h2>Are you sure you wish to delete the following listing:</h2>
+                  <br>
+                  <h3>Title: {{ object.title }}</h3>
                   <h3>Posted on: {{ object.datePosted }}</h3>
                   <h3>Description: {{ object.description }}</h3>
                 </fieldset>

@@ -24,8 +24,10 @@
                             <div class="card-profile-stats d-flex justify-content-center mt-md-5">
                                 <div>
                                     {% if studentProfile.avgRating != 'N/A' %}
-                                    <span class="heading">{{ studentProfile.avgRating }} / 5</span> {% else %}
-                                    <span class="heading">{{ studentProfile.avgRating }} </span> {% endif %}
+                                    <span class="heading">{{ studentProfile.avgRating }} / 5</span> 
+                                    {% else %}
+                                    <span class="heading">N/A</span>
+                                    {% endif %}
                                     <span class="description">Ratings</span>
                                 </div>
                                 <div>
@@ -60,48 +62,25 @@
 
         <div class="col-xl-8 order-xl-1">
             <div class="card bg-secondary shadow">
-                <div class="card-body">
-                    <div class="pl-lg-4">
-                        <div class="row">
-                            <div class="col-lg-8">
-                                <div class="form-group">
-                                    <h2>{{object.title}}</h3>
-                                </div>
-                            </div>
-                            {% if user.username == studentProfile.username %}
-                            <div class="col-lg-2">
-                                <a class="btn btn-primary" href="{% url 'listing-update' object.pk %}">Edit</a>
-                            </div>
-                            <div class="col-lg-2">
-                                <a class="btn btn-danger" href="{% url 'listing-delete' object.pk %}">Delete</a>
-                            </div>
-                            {% else %}
-                            <div class="col-lg-4">
-                                <a class="btn btn-primary" href="{% url 'chat' user.id studentProfile.id object.pk %}">Chat</a>
-                            </div>
-                            {% endif %}
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <span class="heading">{{object.module}}</span>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <span class="heading">Tutor/Tutee: {{object.typeOfListing}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <span class="heading">{{object.datePosted}}</span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="card-header">
+                    <h3> {{object.title}}</h3>
+						{{ object.module }} </br>
+						{{object.datePosted}}</br>
+                        Listing Type: {{object.typeOfListing}}</a>
+                        <br>
+                <!-- Buttons -->
+                    <div class="mt-3">
+                        {% if user.username == studentProfile.username %}
+                        <a class="btn btn-primary" href="{% url 'listing-update' object.pk %}">Edit</a>
+                        <a class="btn btn-danger" href="{% url 'listing-delete' object.pk %}">Delete</a>
+                        {% else %}
+                        <a class="btn btn-success" href="{% url 'chat' user.id studentProfile.id object.pk %}">Chat</a>
+                        {% endif %}
                     </div>
-                    <hr class="my-3" />
+                </div>
+                
+                <!-- Description -->
+                <div class="card-body">
                     <div class="pl-lg-4">
                         <div class="row">
                             <div class="col-md-12">
