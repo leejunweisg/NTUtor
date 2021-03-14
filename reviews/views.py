@@ -2,14 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from listings.utility import fetch_modules, populate_modules
+from django.db.models import Avg
 
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.views.generic import (ListView, CreateView,UpdateView,DeleteView)
 from .models import Review, TuitionSession
 
 from users.models import Profile
-
+from listings.models import Listing
 
 
 
@@ -37,7 +37,6 @@ class ReviewListViewByUsername(LoginRequiredMixin,ListView):
     model = Review
     template_name = 'reviews/listing-reviews-username.html'
     context_object_name = 'reviews'
-    
 
     def get_context_data(self,**kwargs):
         context = super(ReviewListViewByUsername, self).get_context_data(**kwargs)
@@ -51,6 +50,21 @@ class ReviewListViewByUsername(LoginRequiredMixin,ListView):
         tutor = Profile.objects.get(id=selectedUserid)
         
         context['tutorName'] = tutor.user.username
+
+        profile_details = {}
+        profile_details['id'] = tutor.id
+        profile_details['name'] = tutor.name
+        profile_details['username'] = tutor.user.username
+        profile_details['email'] = tutor.user.email
+        profile_details['num_listings'] = Listing.objects.filter(user=tutor).count()
+        profile_details['verified'] = tutor.verified
+        profile_details['desc'] = tutor.description
+        profile_details['image'] = tutor.image
+        avg_rating = Review.objects.filter(reviewee=tutor).aggregate(Avg('rating'))['rating__avg']
+        profile_details['avg_rating'] = avg_rating if avg_rating is not None else 'N/A'
+        
+        context['profile_details'] = profile_details
+
         return context
 
     

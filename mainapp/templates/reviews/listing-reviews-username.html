@@ -1,37 +1,125 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %} {{tutorName}} {% endblock title %}
+{% block title %} {{tutorName}}'s Reviews{% endblock title %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
+
     <!-- Header -->
-    <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
-        <div class="container-fluid">
-          
+    <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" 
+         style="min-height: 400px; background-size: cover; background-position: center top;">
+      <!-- Mask -->
+      <span class="mask bg-gradient-default opacity-8"></span>
+      <!-- Header container -->
+      <div class="container-fluid d-flex align-items-center">
+        <div class="row">
+          <div class="col-lg-7 col-md-10">
+            <h1 class="display-2 text-white">@{{ tutorName }}'s Reviews</h1>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="container-fluid mt--7">
+      <div class="row">
+        <!-- User Summary (Profile Picture, description, reviews) -->
+        <div class="col-xl-4 order-xl-1 mb-5 mb-xl-0">
+          <div class="card card-profile shadow">
+            <div class="row justify-content-center">
+              <div class="col-lg-3 order-lg-2">
+                <div class="card-profile-image">
+                    <img src="{{ profile_details.image.url }}" class="rounded-circle">
+                </div>
+              </div>
+            </div>
+            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+              <div class="d-flex justify-content-between">
+                
+                <a href="{% url 'profile' profile_details.username %}" class="btn btn-sm btn-info float-left">Back to Profile</a>
+                {% if request.user.username == profile_details.username %}
+                <a href="{% url 'edit-profile' %}" class="btn btn-sm btn-default float-right">Edit Profile</a>
+                {% endif %}
+              </div>
+            </div>
+            <div class="card-body pt-0 pt-md-4">
+              <div class="row">
+                <div class="col">
+                  <div class="card-profile-stats d-flex justify-content-center mt-md-5">
+                    <div>
+                      <span class="heading">{{ profile_details.num_listings }}</span>
+                      <span class="description">Listings</span>
+                    </div>
+                    <div>
+                      <span class="heading">{{ profile_details.avg_rating }}</span>
+                      <span class="description">Avg Rating</span>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <h3>
+                  {% if not profile_details.name == None %}
+                    {{ profile_details.name }}
+                  {% else %}
+                    @{{ profile_details.username }}
+                  {% endif %}
+                  
+                  {% if profile_details.verified %}
+                    <i class="fa fa-check-circle text-info" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Verified Tutor"></i>
+                  {% endif %}
+                </h3>
+                <div class="h5 font-weight-300">
+                  {{ profile_details.email }}
+                </div>
+                <div class="h5 mt-4">
+                  <i class="ni business_briefcase-24 mr-2"></i>Description
+                </div>
+                <div>
+                  <i class="ni education_hat mr-2"></i>
+                  {% if not profile_details.desc == None %}
+                    {{ profile_details.desc }}
+                  {% else %}
+                    Nothing here...
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Listings -->
+        <div class="col-xl-8 order-xl-2">
+
           <!-- Print django flash messages -->
           {% include "includes/messages.html" %}
-          <h1 class="text-white">{{tutorName}}'s' Reviews</h1>
-          <div class="mb-2">
-            
-            
-          </div>
-          <div class="header-body">
-            
+
+          <!-- Reviews -->
+          <div class="card bg-secondary shadow">
+            <div class="card-header bg-white border-0">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Reviews</h3>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fill data here -->
             {% for review in reviews %}
             {% if tutorid == review.reviewee.id %}
-            
-            
-                 <!-- review card -->
+            <!-- review card -->
             <div class="row mb-1">
                 <div class="col-xl-12 col-lg-12">
                   <div class="card card-stats mb-4 mb-xl-0">
                     <div class="card-body">
                       <div class="row">
                         <div class="col">
-                          <span class="h2 font-weight-bold mb-0">{{review.tuitionSession.listing.title}}</span>
-                          <h5 class="card-title text-uppercase text-muted mb-0">{{review.description}}</h5>
+                          <h5 class="card-title text-uppercase text-muted mb-0">Listing: {{review.tuitionSession.listing.title}}</h5>
+                          <span class="h3 font-weight-bold mb-0">{{review.description}}</span>
                           
                         </div>
                         <div class="col-auto">
@@ -52,7 +140,7 @@
                       </p>
   
                       <p class="mt-3 mb-0 text-muted text-sm">
-                          <span class="text-nowrap">By: {{review.reviewer}}</span>
+                          <span class="text-nowrap">By: {{review.reviewer.name}}</span>
                       
                       </p>
                     </div>
@@ -61,13 +149,13 @@
               </div><!--End of card-->
               {% endif %}
             {% endfor %}
-           
-
-           
+              
+          </div>
         </div>
-      </div>
 
-   
+      </div>
+    {% include "includes/footer.html" %}
+    </div>
 
 {% endblock content %}
 
