@@ -2,9 +2,12 @@ from django.shortcuts import render
 from django.db.models import Avg
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from operator import itemgetter
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger 
+from django.urls import reverse_lazy
+from django.contrib import messages
 
 # import models that are accessed in this view
 from .models import Listing, Module, TuitionSession
@@ -12,7 +15,7 @@ from users.models import Profile
 from reviews.models import Review
 
 # home page 2
-@login_required()
+@login_required
 def listings(request):
 
     tuitionFilterQuery = 'on'
@@ -72,7 +75,7 @@ def listings(request):
     return render(request, 'listings/listings.html', context)
 
 # home page
-@login_required()
+@login_required
 def home(request):
 
     # latest tuition listings
@@ -242,7 +245,8 @@ def getStudentDetails(username):
     return studentDetailsList
 
 # Class to view one listing
-class ListingDetailView(DetailView):
+
+class ListingDetailView(DetailView, LoginRequiredMixin):
     model = Listing
     fields = ['title', 'module', 'typeOfStudent', 'datePosted', 'description']
 
@@ -255,22 +259,22 @@ class ListingDetailView(DetailView):
         return context
 
 # Class to make form for create tuition listing
-class ListingCreateView(LoginRequiredMixin, CreateView):
+class ListingCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Listing
     fields = ['title', 'description', 'module', 'typeOfListing']
-
+    success_message = "The listing has been created!"
     # Get username and submit form
     def form_valid(self, form):
         form.instance.user = Profile.objects.get(user_id = self.request.user)
         return super().form_valid(form)
 
 # Class to make form for update tuition listing
-class ListingUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class ListingUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = Listing
     fields = ['title', 'description']
     template_name_suffix = '_update_form'
     slug_url_kwarg = 'listingID'
-
+    success_message = "The listing has been updated!"
     # Get username and submit form
     def form_valid(self, form):
         form.instance.user = Profile.objects.get(user_id = self.request.user)
@@ -284,7 +288,11 @@ class ListingUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class ListingDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Listing
-    success_url = '/'
+    success_url = reverse_lazy('home')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "The listing has been deleted!")
+        return super(ListingDeleteView, self).delete(request, *args, **kwargs)
 
     # Only creator of listing can delete listing
     def test_func(self):

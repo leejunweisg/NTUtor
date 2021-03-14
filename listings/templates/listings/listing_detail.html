@@ -61,6 +61,8 @@
         </div>
 
         <div class="col-xl-8 order-xl-1">
+            <!-- Print django flash messages -->
+          {% include "includes/messages.html" %}
             <div class="card bg-secondary shadow">
                 <div class="card-header">
                     <h3> {{object.title}}</h3>
