@@ -27,9 +27,9 @@ def listings(request):
     if tuitionFilterQuery == 'on' and requestFilterQuery == 'on':
         listingType = ''
     elif tuitionFilterQuery == 'on':
-        listingType = 'Tuition'
+        listingType = 'Providing'
     elif requestFilterQuery == 'on':
-        listingType = 'Request'
+        listingType = 'Requesting'
 
     # If filter is none, return as ''
     if ratingsFilterQuery is None or ratingsFilterQuery == 'Any':
@@ -60,7 +60,9 @@ def listings(request):
         'tuitionListings': tuitionListings,
         'ratingsFilterQuery': request.GET.get('ratingsFilter'),
         'codeFilterQuery': codeFilterQuery,
-        'nameFilterQuery': nameFilterQuery
+        'nameFilterQuery': nameFilterQuery,
+        'tuitionFilterQuery': tuitionFilterQuery,
+        'requestFilterQuery': requestFilterQuery
    }
 
     return render(request, 'listings/listings.html', context)

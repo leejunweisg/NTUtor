@@ -81,20 +81,30 @@
                     </select>
                                 </div>
                             </div>
-
                             <!-- Listing Types -->
                             <div class="col-lg-2">
                                 <div class="form-group">
-                                    <label for="example-text-input" class="form-control-label">Types</label>
-
+                                    <label for="example-text-input" class="form-control-label">Types</label> {% if tuitionFilterQuery == 'on' %}
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="tuitionFilter" name="tuitionFilter" checked>
+                                        <label class="custom-control-label" for="tuitionFilter">Tuition Listings </label>
+                                    </div>
+                                    {% else %}
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="tuitionFilter" name="tuitionFilter">
                                         <label class="custom-control-label" for="tuitionFilter">Tuition Listings </label>
                                     </div>
+                                    {% endif %} {% if requestFilterQuery == 'on' %}
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="requestFilter" name="requestFilter" checked>
+                                        <label class="custom-control-label" for="requestFilter">Request Listings</label>
+                                    </div>
+                                    {% else %}
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="requestFilter" name="requestFilter">
                                         <label class="custom-control-label" for="requestFilter">Request Listings</label>
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
