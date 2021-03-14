@@ -3,15 +3,7 @@
 {% block popup %}
 <!-- Button trigger modal -->
 <!-- add if statement to show which text Make Offer, Accept Offer-->
-{% if tuitionSession.offer == 0 and listing.user != user%}
-<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Request Session</button>
-{% elif tuitionSession.offer == 1 and listing.user == user%}
-<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Accept Session</button>
-{% elif tuitionSession.offer == 2 and listing.user == user%}
-<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Complete Session</button>
-{% elif tuitionSession.offer == 3 %}
-<a href="{% url 'review-create-id' receiverID tuitionSession %}" button type="button" class="btn btn-primary mt-3">Leave a Review</a>
-{% endif %}
+
 
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
