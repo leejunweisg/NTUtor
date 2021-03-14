@@ -99,7 +99,7 @@ def home(request):
 
 # returns 10 latest listings
 def getLatestListings(listing_type):
-    latest_listings = Listing.objects.filter(typeOfListing=listing_type).order_by('-listingID')[:10]
+    latest_listings = Listing.objects.filter(typeOfListing=listing_type).order_by('-listingID')[:5]
 
     latest_listings_list = []
 
