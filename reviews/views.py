@@ -62,7 +62,7 @@ class ReviewListViewByUsername(LoginRequiredMixin,ListView):
         profile_details['image'] = tutor.image
         avg_rating = Review.objects.filter(reviewee=tutor).aggregate(Avg('rating'))['rating__avg']
         profile_details['avg_rating'] = avg_rating if avg_rating is not None else 'N/A'
-        
+
         context['profile_details'] = profile_details
 
         return context
@@ -90,7 +90,7 @@ class ReviewCreateView(LoginRequiredMixin,CreateView):
 #update listing, takes in a tutorID from the url and use it for reference
 class ReviewUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Review
-    template_name = 'reviews/review_form.html'
+    template_name = 'reviews/review_form_update.html'
     fields = [ 'description','rating']
    
     def form_valid(self,form):
