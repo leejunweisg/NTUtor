@@ -164,9 +164,9 @@ def message_listing_view(request, sender, receiver, listingID):
                 return render(request, "chat/chat.html", context=context)
             elif request.POST.get("completeSession"):
                 tuitionSession.offer = 3 
-                tuitionSession.save()
                 context['tuitionSession'] = 3
                 tuitionSession.completed = True
+                tuitionSession.save()
                 return render(request, "chat/chat.html", context=context)
             #if request.POST.get("reviewSession"):
             #     tuitionSession.offer = 4 
