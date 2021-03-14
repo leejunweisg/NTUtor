@@ -39,8 +39,21 @@
 					<img src="{{ user.profile.image.url }}" class="rounded-circle" style="height: 5vh"></a>
 					<a href="{% url 'listing-detail' listing.listingID %}">
 					<h3> {{listing.title}}</h3>
-						Module: {{ listing.module }} </br>
-						Posted on: {{listing.datePosted}}</br></a>
+						{{ listing.module }} </br>
+						{{listing.datePosted}}</br></a>
+					<a class="btn btn-primary mt-3" href="{% url 'listing-detail' listing.listingID %}">View Listing</a>
+
+					<!-- State buttons -->
+					{% if tuitionSession.offer == 0 and listing.user != user%}
+						<button type="button" class="btn btn-success mt-3" data-toggle="modal" data-target="#exampleModal">Request Session</button>
+					{% elif tuitionSession.offer == 1 and listing.user == user%}
+						<button type="button" class="btn btn-success mt-3" data-toggle="modal" data-target="#exampleModal">Accept Session</button>
+					{% elif tuitionSession.offer == 2 and listing.user == user%}
+						<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Complete Session</button>
+					{% elif tuitionSession.offer == 3 %}
+						<a href="{% url 'review-create-id' receiverID tuitionSession %}" button type="button" class="btn btn-primary mt-3">Leave a Review</a>
+					{% endif %}
+					<hr>
 					<!-- popup box-->
 					{% block foo %}
 						{% include "chat/chat_popup.html" %}

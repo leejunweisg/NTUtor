@@ -5,6 +5,7 @@ from django.utils import timezone
 
 from django.urls import reverse
 from django.shortcuts import redirect
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Review(models.Model):
@@ -18,7 +19,7 @@ class Review(models.Model):
     description = models.TextField(max_length=3000)
 
     # Need to create validation either on form side or model side
-    rating = models.IntegerField()
+    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
 
     def __str__(self):
         return f"{self.reviewID}"
