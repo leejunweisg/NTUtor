@@ -15,12 +15,16 @@ from reviews.models import Review
 @login_required()
 def listings(request):
 
+    tuitionFilterQuery = 'on'
+    requestFilterQuery = 'on'
+
     # Get filters
     tuitionFilterQuery = request.GET.get('tuitionFilter')
     requestFilterQuery = request.GET.get('requestFilter')
     ratingsFilterQuery = request.GET.get('ratingsFilter')
     codeFilterQuery = request.GET.get('codeFilter')
     nameFilterQuery = request.GET.get('nameFilter')
+    
 
     # set listing type
     listingType = ''
