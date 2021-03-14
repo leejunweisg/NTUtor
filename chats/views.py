@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.http.response import JsonResponse, HttpResponse
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from chats.models import Message 
 from listings.models import Listing, TuitionSession       
 from users.models import Profile                                        
@@ -12,7 +13,8 @@ from chats.serializers import MessageSerializer, UserSerializer
 
 # Views to return our serialized data 
 # Users View
-@csrf_exempt                                                              
+@login_required
+@csrf_exempt
 def user_list(request, pk=None):
 
     if request.method == 'GET':
@@ -32,6 +34,7 @@ def user_list(request, pk=None):
         return JsonResponse(serializer.errors, status=400)     # Return back the errors  if not valid
 
 # Message View
+@login_required
 @csrf_exempt
 def message_list(request, sender=None, receiver=None, listingID=None):
     """
@@ -54,10 +57,9 @@ def message_list(request, sender=None, receiver=None, listingID=None):
         return JsonResponse(serializer.errors, status=400)
 
 # View Chat History
+@login_required
 def chat_view(request):
     """Render the template with required context variables"""
-    if not request.user.is_authenticated:
-        return redirect('index')
     if request.method == "GET":
         h_list = get_history_list(request,Message.objects.all(),Listing.objects.all())
         return render(request, 'chat/chat_history.html', 
@@ -66,6 +68,7 @@ def chat_view(request):
 					  'history_list': h_list}) 
 
 # Function to get history list
+@login_required
 def get_history_list(request, messages, listings):
 	h_list = []
 	for message in messages:
@@ -84,103 +87,98 @@ def get_history_list(request, messages, listings):
 						
 # View to render template for sending and receiving messages	
 # Takes arguments 'listingID' ,'sender' and 'receiver' to identify the message list to return
+@login_required
 def message_listing_view(request, sender, receiver, listingID): 
     """Render the template with required context variables"""
-    if not request.user.is_authenticated:
-        return redirect('index')
-    else:
-        # identify tutor and tutee
-        obj = Listing.objects.get(listingID=listingID) #listingID
-        listType = obj.typeOfListing
-        #print(obj)
-        tutor =""
-        tutee =""
-        tutorID = ""
-        tuteeID = ""
+    # identify tutor and tutee
+    obj = Listing.objects.get(listingID=listingID) #listingID
+    listType = obj.typeOfListing
+    #print(obj)
+    tutor =""
+    tutee =""
+    tutorID = ""
+    tuteeID = ""
 
-        sender_name = Profile.objects.get(user_id=sender)
-        receiver_name = Profile.objects.get(user_id=receiver)
-        #print(receiver_name)
+    sender_name = Profile.objects.get(user_id=sender)
+    receiver_name = Profile.objects.get(user_id=receiver)
+    #print(receiver_name)
 
-        if listType == "providing": #Listing host is learner
-            #print(obj.user)
-            tutee = obj.user
-            #compare sender and receiver, whatever is not tutee must be the tutor
-            if tutee != sender_name:
-                tutor = sender_name
-                tutorID = sender
-                tuteeID = receiver
-            else :
-                tutor = receiver_name
-                tutorID = receiver
-                tuteeID = sender
-        else : #listing host is teacher
-            tutor = obj.user
-            if tutor != sender_name:
-                tutee = sender_name
-                tuteeID = sender        
-                tutorID = receiver
-            else :
-                tutee = receiver_name
-                tuteeID = receiver
-                tutorID = sender
-        #print(obj)
-        #print(tutorID)
-        #print(tuteeID)
+    if listType == "providing": #Listing host is learner
+        #print(obj.user)
+        tutee = obj.user
+        #compare sender and receiver, whatever is not tutee must be the tutor
+        if tutee != sender_name:
+            tutor = sender_name
+            tutorID = sender
+            tuteeID = receiver
+        else :
+            tutor = receiver_name
+            tutorID = receiver
+            tuteeID = sender
+    else : #listing host is teacher
+        tutor = obj.user
+        if tutor != sender_name:
+            tutee = sender_name
+            tuteeID = sender        
+            tutorID = receiver
+        else :
+            tutee = receiver_name
+            tuteeID = receiver
+            tutorID = sender
+    #print(obj)
+    #print(tutorID)
+    #print(tuteeID)
 
-        tuitionSession, created = TuitionSession.objects.get_or_create(tutor=tutor, learner=tutee, listing=obj)
-        #TuitionSession.objects.get(tutor=tutor, learner=tutee, listing=obj).offer
-        #print(tuitionSession.offer)
-        #print(tuitionSession)
+    tuitionSession, created = TuitionSession.objects.get_or_create(tutor=tutor, learner=tutee, listing=obj)
+    #TuitionSession.objects.get(tutor=tutor, learner=tutee, listing=obj).offer
+    #print(tuitionSession.offer)
+    #print(tuitionSession)
 
-        listings = Listing.objects.get(listingID = listingID)
-        
-        
-        context = {
-            'listing_id' : listingID,
-		    'users': User.objects.exclude(username=request.user.username), #List of users
-            'receiver': User.objects.get(id=receiver), # Receiver context user object for using in template
-            'messages': Message.objects.filter(listingID=listingID,sender_id=sender, receiver_id=receiver) |
-                                   Message.objects.filter(listingID=listingID,sender_id=receiver, receiver_id=sender), # Return context with message objects where users are either sender or receiver.
-			'listing': listings,
-            'tuitionSession': tuitionSession,
-            'user' : Profile.objects.get(user=request.user.id),
-            'tutorID': tutorID,
-            'receiverID' : receiver,
-        }
+    listings = Listing.objects.get(listingID = listingID)
+    
+    
+    context = {
+        'listing_id' : listingID,
+        'users': User.objects.exclude(username=request.user.username), #List of users
+        'receiver': User.objects.get(id=receiver), # Receiver context user object for using in template
+        'messages': Message.objects.filter(listingID=listingID,sender_id=sender, receiver_id=receiver) |
+                                Message.objects.filter(listingID=listingID,sender_id=receiver, receiver_id=sender), # Return context with message objects where users are either sender or receiver.
+        'listing': listings,
+        'tuitionSession': tuitionSession,
+        'user' : Profile.objects.get(user=request.user.id),
+        'tutorID': tutorID,
+        'receiverID' : receiver,
+    }
 
-        if request.method == "GET":
-             return render(request, "chat/chat.html", context = context) 
-        elif request.method == "POST":
-            if request.POST.get("startSession"):
-                tuitionSession.offer = 1 
-                tuitionSession.save()
-                context['tuitionSession'] = 1
-                return render(request, "chat/chat.html", context=context)        
-            elif request.POST.get("acceptSession"):
-                tuitionSession.offer = 2 
-                tuitionSession.save()
-                context['tuitionSession'] = 2
-                return render(request, "chat/chat.html", context=context)
-            elif request.POST.get("completeSession"):
-                tuitionSession.offer = 3 
-                context['tuitionSession'] = 3
-                tuitionSession.completed = True
-                tuitionSession.save()
-                return render(request, "chat/chat.html", context=context)
-            #if request.POST.get("reviewSession"):
-            #     tuitionSession.offer = 4 
-            #     tuitionSession.save()
-            #     context['tuitionSession'] = 4
-            #    return render(request, "chat/chat.html", context=context)
+    if request.method == "GET":
+            return render(request, "chat/chat.html", context = context) 
+    elif request.method == "POST":
+        if request.POST.get("startSession"):
+            tuitionSession.offer = 1 
+            tuitionSession.save()
+            context['tuitionSession'] = 1
+            return render(request, "chat/chat.html", context=context)        
+        elif request.POST.get("acceptSession"):
+            tuitionSession.offer = 2 
+            tuitionSession.save()
+            context['tuitionSession'] = 2
+            return render(request, "chat/chat.html", context=context)
+        elif request.POST.get("completeSession"):
+            tuitionSession.offer = 3 
+            context['tuitionSession'] = 3
+            tuitionSession.completed = True
+            tuitionSession.save()
+            return render(request, "chat/chat.html", context=context)
+        #if request.POST.get("reviewSession"):
+        #     tuitionSession.offer = 4 
+        #     tuitionSession.save()
+        #     context['tuitionSession'] = 4
+        #    return render(request, "chat/chat.html", context=context)
 
 
-
-	
+@login_required
 def message_view(request, sender, receiver): 
     """Render the template with required context variables"""
-    if not request.user.is_authenticated:
-        return redirect('index')
     if request.method == "GET":
         return render(request, "chat/messages.html",
                       {'users': User.objects.exclude(username=request.user.username), #List of users
