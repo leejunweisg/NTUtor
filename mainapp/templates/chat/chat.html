@@ -90,13 +90,12 @@
 				<div class="card-footer">
 					<form id="chat-box" class="form-group {% block hide %}hide{% endblock %}" method="post">
 						{% csrf_token %}
-						<div class="row">
-							<div class="col s11">
-								<div class="input-field">
-									<input class="form-control form-control-alternative" placeholder="Type your message.." type="text" input id="id_message">
-								</div>
+						<div class="row mt-4">
+							<div class="input-field col-11">
+								<input class="form-control form-control-alternative" placeholder="Type your message.." type="text" input id="id_message">
 							</div>
-							<div class="col s11" style="line-height: 50px" align='right'>
+
+							<div class="col-1">
 								<button class="btn btn-floating blue waves-effect waves-light"><i class="material-icons">send</i></button>
 							</div>
 						</div>
