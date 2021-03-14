@@ -1,7 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.models import User 
-#from django.contrib.auth import authenticate, login                               
-from django.http.response import JsonResponse, HttpResponse
+from django.http.response import JsonResponse, HttpResponseRedirect
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -16,7 +15,6 @@ from chats.serializers import MessageSerializer, UserSerializer
 @login_required
 @csrf_exempt
 def user_list(request, pk=None):
-
     if request.method == 'GET':
         if pk:                                                                      
 		# If PrimaryKey (id) of the user is specified in the url
@@ -37,9 +35,7 @@ def user_list(request, pk=None):
 @login_required
 @csrf_exempt
 def message_list(request, sender=None, receiver=None, listingID=None):
-    """
-    List all required messages, or create a new message.
-    """
+    """List all required messages, or create a new message."""
     if request.method == 'GET':
 		#Requires sender, receiver, listingID as URL parameters
         messages = Message.objects.filter(listingID=listingID,sender_id=sender, receiver_id=receiver)
@@ -157,23 +153,18 @@ def message_listing_view(request, sender, receiver, listingID):
             tuitionSession.offer = 1 
             tuitionSession.save()
             context['tuitionSession'] = 1
-            return render(request, "chat/chat.html", context=context)        
+            return HttpResponseRedirect(request.path)
         elif request.POST.get("acceptSession"):
             tuitionSession.offer = 2 
             tuitionSession.save()
             context['tuitionSession'] = 2
-            return render(request, "chat/chat.html", context=context)
+            return HttpResponseRedirect(request.path)
         elif request.POST.get("completeSession"):
             tuitionSession.offer = 3 
             context['tuitionSession'] = 3
             tuitionSession.completed = True
             tuitionSession.save()
-            return render(request, "chat/chat.html", context=context)
-        #if request.POST.get("reviewSession"):
-        #     tuitionSession.offer = 4 
-        #     tuitionSession.save()
-        #     context['tuitionSession'] = 4
-        #    return render(request, "chat/chat.html", context=context)
+            return HttpResponseRedirect(request.path)
 
 
 @login_required

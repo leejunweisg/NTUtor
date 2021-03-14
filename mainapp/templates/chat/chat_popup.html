@@ -37,11 +37,11 @@
             <form action="{% url 'chat' request.user.id receiver.id listing.listingID %}" method="post">
               {% csrf_token %}
               {% if tuitionSession.offer == 0 and listing.user != user %}
-              <button class="btn btn-primary" type="submit" onclick="tuitionMsg('Request Sent')" name="startSession" id="startSession" value="startSession">Confirm</button>
+              <button class="btn btn-success" type="submit" onclick="tuitionMsg('Request Sent!')" name="startSession" id="startSession" value="startSession">Confirm</button>
               {% elif tuitionSession.offer == 1 and listing.user == user %}
-              <button class="btn btn-primary"type="submit" onclick="tuitionMsg('Accept Sent')" name="acceptSession" id="acceptSession" value="acceptSession">Confirm</button>	
+              <button class="btn btn-success"type="submit" onclick="tuitionMsg('Accepted Request!')" name="acceptSession" id="acceptSession" value="acceptSession">Confirm</button>	
               {% elif tuitionSession.offer == 2 and listing.user == user %}
-              <button class="btn btn-primary"type="submit" onclick="tuitionMsg('Session Completed')" name="completeSession" id="completeSession" value="completeSession">Confirm</button>
+              <button class="btn btn-success"type="submit" onclick="tuitionMsg('Session marked as completed!')" name="completeSession" id="completeSession" value="completeSession">Confirm</button>
               {% endif %}
             </form>
         </div>

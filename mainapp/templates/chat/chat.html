@@ -49,9 +49,9 @@
 					{% elif tuitionSession.offer == 1 and listing.user == user%}
 						<button type="button" class="btn btn-success mt-3" data-toggle="modal" data-target="#exampleModal">Accept Session</button>
 					{% elif tuitionSession.offer == 2 and listing.user == user%}
-						<button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Complete Session</button>
+						<button type="button" class="btn btn-success mt-3" data-toggle="modal" data-target="#exampleModal">Complete Session</button>
 					{% elif tuitionSession.offer == 3 %}
-						<a href="{% url 'review-create-id' receiverID tuitionSession %}" button type="button" class="btn btn-primary mt-3">Leave a Review</a>
+						<a href="{% url 'review-create-id' receiverID tuitionSession %}" button type="button" class="btn btn-success mt-3">Leave a Review</a>
 					{% endif %}
 					<hr>
 					<!-- popup box-->
@@ -88,7 +88,7 @@
 
 				<!-- Card footer (Chat text box )-->
 				<div class="card-footer">
-					<form id="chat-box" class="form-group {% block hide %}hide{% endblock %}" method="post">
+					<form id="chat-box" class="form-group {% block hide %}hide{% endblock %}">
 						{% csrf_token %}
 						<div class="row mt-4">
 							<div class="input-field col-11">
@@ -96,7 +96,7 @@
 							</div>
 
 							<div class="col-1">
-								<button class="btn btn-floating blue waves-effect waves-light"><i class="material-icons">send</i></button>
+								<button class="btn btn-floating blue waves-effect waves-light"><i class="material-icons"></i></button>
 							</div>
 						</div>
 					</form>
@@ -114,13 +114,6 @@
 
 {% block javascripts %}
 <script>
-
-	// For receiving, set global variables to be used by the 'receive' function
-	sender_id = "{{ receiver.id }}"; //Context variable for receiver
-	receiver_id = "{{ request.user.id }}"; //Context variable for current logged in user
-	listing_id = "{{listing_id }}";
-
-	//For sending
 	$(function () {
 		scrolltoend(); // Function to show the latest message, which is at the bottom of the message box, by scrolling to the end
 		//Handling the submit event to send the message.
@@ -131,18 +124,15 @@
 			message.val(''); //Clear content of the the input field after sending
 		})
 	})
-	//For sending tuition messages
+
 	function tuitionMsg(message) {
-		scrolltoend();
 		send('{{ listing_id}}','{{ request.user.username }}', '{{ receiver.username }}', message); //Send function will be defined within 'chat.js'
-		message.val(''); //Clear content of the the input field after sending
-		location.href="chat/chat.html";
 	}
+
 </script>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="{% static 'assets/js/materialize.min.js' %}"></script>
-
 <script type="text/javascript" src="{% static 'assets/js/strftime.js' %}"></script>
 <script type="text/javascript" src="{% static 'assets/js/chat.js' %}"></script>
 
