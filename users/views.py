@@ -29,7 +29,7 @@ def profile(request, username):
     profile_details['username'] = profile.user.username
     profile_details['email'] = profile.user.email
     profile_details['num_listings'] = Listing.objects.filter(user=profile).count()
-    profile_details['verified'] = profile.verified
+    profile_details['verified'] = profile.verified == 1
     profile_details['desc'] = profile.description
     profile_details['image'] = profile.image
     avg_rating = Review.objects.filter(reviewee=profile).aggregate(Avg('rating'))['rating__avg']
