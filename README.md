@@ -1,37 +1,26 @@
 # NTUtor
- CZ3002 - Group Assignment
+CZ3002 - Group Assignment (AY20/21)
 
 ## Installation
-1. Clone/branch repo into a location of your choice. (e.g. ```C:\Users\junwei\Desktop\projectfiles\```)<br/>
-The cloned repo will stored at  ```C:\Users\junwei\Desktop\projectfiles\NTUtor\```
-2. Open cmd and cd ```C:\Users\junwei\Desktop\projectfiles\NTUtor\``` your cloned repo
-3. Next, create a new virtual environemnt using venv: ```virtualenv venv```<br/>
-The virtual environment will be created at: ```C:\Users\junwei\Desktop\projectfiles\venv\```
-4. Activate the virtual environment: ```.\venv\Scripts\activate```<br/>
-You should see a ```(venv)``` in your terminal.
-5. Change directory to the cloned repository: ```cd NTUtor```
-6. Install dependencies using ```pip```: ```pip install -r requirements.txt```
+1. Clone the repo into a location of your choice. (e.g. `C:\Users\junwei\Desktop\projectfiles\`)<br/>
+The cloned repo will stored at  `C:\Users\junwei\Desktop\projectfiles\NTUtor\`
+2. Next, at `C:\Users\junwei\Desktop\projectfiles`, create a new virtual environemnt using venv: `virtualenv venv`<br/>
+The virtual environment will be created at: `C:\Users\junwei\Desktop\projectfiles\venv\`
+4. Activate the virtual environment: `.\venv\Scripts\activate`<br/>
+You should see a `(venv)` prepended to the terminal prompt.
+5. Change directory to the cloned repository: `cd NTUtor`
+6. Install dependencies using pip: `pip install -r requirements.txt`
 7. Installation complete.
 
 ## Run Development Server
-1. Change directory to the repository: ```cd NTUtor```
-2. cd to your repo 
-3. Run command: ```python manage.py runserver```
-4. Browse to ```localhost:8000``` on your browser.
+1. From the root directory, execute: `python manage.py runserver`
+3. Navigate to `localhost:8000` on your browser.
 
-## Create admin account thru cmd
-1. To create an admin account in django:
-2. python manage.py createsuperuser
-3. Enter your desired username and press enter.
-4. Username: admin
-   You will then be prompted for your desired email address:
-5. Email address: admin@example.com
-   The final step is to enter your password. You will be asked to enter your password twice, the second time as a confirmation of the first.
-6. Password: **********
-   Password (again): *********
-   Superuser created successfully.
+## Super User Account
+### If needed, create a superuser account from the terminal
+1. From the root directory, execute: `python manage.py createsuperuser`
+2. Follow the prompts to create a superuser account.
 
-User Acc:
-Username:admin123
-password:password123!
-All cap sensitive 
+### Or use a pre-created superuser account
+Username: `admin123`
+password: `password123!`
